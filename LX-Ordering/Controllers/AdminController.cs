@@ -111,6 +111,7 @@ namespace LX_Ordering.Controllers
         //添加菜色
         public ActionResult AddDish()
         {
+            //s
             return View();
         }
         [HttpPost]
