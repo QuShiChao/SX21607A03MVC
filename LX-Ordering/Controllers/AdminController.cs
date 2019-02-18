@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using LX_Ordering.Models;
+using LX_Ordering;
+using Newtonsoft.Json;
 
 namespace LX_Ordering.Controllers
 {
@@ -34,30 +36,77 @@ namespace LX_Ordering.Controllers
         {
             return 0;
         }
+        //菜肴操作页面
+        public ActionResult ShowCatagery()
+        {
+            return View();
+        }
         //添加菜系
         public ActionResult AddCatagery()
         {
             return View();
         }
         [HttpPost]
-        public int AddCatagery(Catagery catagery)
+        public void AddCatagery(Catagery catagery)
         {
-            return 0;
+            string str = "api/OrderAPI/AddCata";
+            var cata = JsonConvert.SerializeObject(catagery);
+            int result=Convert.ToInt32(HttpClientHelper.SendRequest(str,"post",cata));
+            if (result>0)
+            {
+                Response.Write("<script>alert('添加成功！');location.href='/Admin/';</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('添加失败！');location.href='/Admin/';</script>");
+            }
         }
         //查看菜系
         public ActionResult GetCatagery()
         {
-            return View();
+            List<Catagery> CataList = ShowCata();
+            return View(CataList);
+        }
+        //查询所有菜系
+        private static List<Catagery> ShowCata()
+        {
+            string str = "api/OrderAPI/GetCatagery";
+            List<Catagery> CataList = JsonConvert.DeserializeObject<List<Catagery>>(HttpClientHelper.SendRequest(str, "get"));
+            return CataList;
+        }
+        public void DelCatagery(int id)
+        {
+            string str = "api/OrderAPI/UpdCata?id="+id;
+            int result = Convert.ToInt32(HttpClientHelper.SendRequest(str, "delete"));
+            if (result > 0)
+            {
+                Response.Write("<script>alert('删除成功！');location.href='/Admin/';</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('删除失败！');location.href='/Admin/';</script>");
+            }
         }
         //编辑菜系
         public ActionResult UpdCatagery(int id)
         {
-            return View();
+            List<Catagery> CataList = ShowCata().Where(s=>s.Id.Equals(id)).ToList();
+            return View(CataList);
         }
         [HttpPost]
-        public int UpdCatagery(Catagery catagery)
+        public void UpdCatagery(Catagery catagery)
         {
-            return 0;
+            string str = "api/OrderAPI/UpdCata";
+            var cata = JsonConvert.SerializeObject(catagery);
+            int result = Convert.ToInt32(HttpClientHelper.SendRequest(str, "put", cata));
+            if (result > 0)
+            {
+                Response.Write("<script>alert('修改成功！');location.href='/Admin/';</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('修改失败！');location.href='/Admin/';</script>");
+            }
         }
         //添加菜色
         public ActionResult AddDish()
