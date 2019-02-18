@@ -145,7 +145,7 @@ namespace LX_Ordering.Controllers
             return View();
         }
         [HttpPost]
-        public int UpdOrder(OrderInfo order)
+        public int UpdOrder(OrderInfo order)//测试
         {
             return 0;
         }
