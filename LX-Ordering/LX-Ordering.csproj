@@ -388,10 +388,17 @@
     <Content Include="Views\Admin\GetSales.cshtml" />
     <Content Include="Views\Admin\AddDish.cshtml" />
     <Content Include="Views\Admin\LookEvaluate.cshtml" />
+    <Content Include="Views\Client\Contact.cshtml" />
+    <Content Include="Views\Client\Index.cshtml" />
+    <Content Include="Views\Client\Login.cshtml" />
+    <Content Include="Views\Client\Ordering.cshtml" />
+    <Content Include="Views\Client\Register.cshtml" />
+    <Content Include="Views\Client\ShopCar.cshtml" />
+    <Content Include="Views\Client\SingleA.cshtml" />
+    <Content Include="Views\Client\UpInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Client\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
