@@ -144,6 +144,21 @@ namespace LX_Ordering.Controllers
         {
             return View();
         }
+        //经济收入页面
+        public ActionResult GetIncome()
+        {
+            return View();
+        }
+        //菜肴销量页面
+        public ActionResult GetSales()
+        {
+            return View();
+        }
+        //菜色评价
+        public ActionResult LookEvaluate()
+        {
+            return View();
+        }
         [HttpPost]
         public int UpdOrder(OrderInfo order)//测试
         {

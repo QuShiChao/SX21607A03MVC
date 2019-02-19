@@ -381,6 +381,12 @@
     <Content Include="Views\AdminPage1.cshtml" />
     <Content Include="Views\Admin\ShowCatagery.cshtml" />
     <Content Include="Views\Admin\AddCatagery.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\GetOrder.cshtml" />
+    <Content Include="Views\Admin\GetIncome.cshtml" />
+    <Content Include="Views\Admin\GetSales.cshtml" />
+    <Content Include="Views\Admin\AddDish.cshtml" />
+    <Content Include="Views\Admin\LookEvaluate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
