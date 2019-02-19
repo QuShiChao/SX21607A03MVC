@@ -111,7 +111,9 @@ namespace LX_Ordering.Controllers
         //添加菜色
         public ActionResult AddDish()
         {
-            //s
+            //获取菜系集合
+            List<Catagery> cataList = CommonGet<Catagery>.GetList();
+            ViewBag.Cata = new SelectList(cataList, "Id", "Name");
             return View();
         }
         [HttpPost]
