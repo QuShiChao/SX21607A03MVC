@@ -39,7 +39,7 @@ namespace LX_Ordering.Models
         [Display(Name = "备注")]
         [Required(ErrorMessage = "不能为空")]
         public string Leave { get; set; }
-        //订单状态：未付款0、已付款1、未评价2、已评价3
+        //订单状态：购物车0、待付款1、已付款2、已接单、已发货3、未评价4、已评价5
         [Display(Name = "状态")]
         [Required(ErrorMessage = "不能为空")]
         public int Status { get; set; }
