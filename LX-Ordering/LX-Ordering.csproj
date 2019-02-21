@@ -248,6 +248,14 @@
     <Content Include="ClassAdmin\images\favicon.png" />
     <Content Include="ClassAdmin\images\logo-mini.svg" />
     <Content Include="ClassAdmin\images\logo.svg" />
+    <Content Include="ClassAdmin\images\好评.PNG" />
+    <Content Include="ClassAdmin\images\好评1.PNG" />
+    <Content Include="ClassAdmin\images\差评.PNG" />
+    <Content Include="ClassAdmin\images\差评1.PNG" />
+    <Content Include="ClassAdmin\images\已签收.gif" />
+    <Content Include="ClassAdmin\images\待接单.png" />
+    <Content Include="ClassAdmin\images\待配送.gif" />
+    <Content Include="ClassAdmin\images\派送中.png" />
     <Content Include="ClassAdmin\js\chart.js" />
     <Content Include="ClassAdmin\js\dashboard.js" />
     <Content Include="ClassAdmin\js\file-upload.js" />
@@ -593,6 +601,8 @@
     <Content Include="Views\Client\ShopCar.cshtml" />
     <Content Include="Views\Client\SingleA.cshtml" />
     <Content Include="Views\Client\UpInfo.cshtml" />
+    <Content Include="Views\Client\SingleAdd.cshtml" />
+    <Content Include="Views\Client\Map.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
