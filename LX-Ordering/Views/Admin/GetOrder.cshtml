@@ -84,33 +84,37 @@
                                             }
                                         </td>
                                         <td>
-                                            @if ((item.Status) == 0)
+                                            @if ((item.Status) == 1)
                                             {
-                                                <label style="color:#808080">未付款</label>
-                                            }
-                                            else if ((item.Status) == 1)
-                                            {
-                                                <label>已付款</label>
+                                                <label style="color:#808080">待付款</label>
                                             }
                                             else if ((item.Status) == 2)
                                             {
-                                                <label>运输中</label>
+                                                <label>已付款</label>
                                             }
                                             else if ((item.Status) == 3)
                                             {
-                                                <label>未评价</label>
+                                                <label>已接单</label>
                                             }
                                             else if ((item.Status) == 4)
+                                            {
+                                                <label>已发货</label>
+                                            }
+                                            else if ((item.Status) == 5)
+                                            {
+                                                <label>未评价</label>
+                                            }
+                                            else if ((item.Status) == 6)
                                             {
                                                 <label>已评价</label>
                                             }
                                         </td>
                                         <td>
-                                            @if ((item.OrderType) == 0 && (item.Status) == 1)
+                                            @if ((item.OrderType) == 0 && (item.Status) == 2)
                                             {
-                                                <input id="Button1" type="button" value="点击上菜" onclick="location.href='/Admin/UpdOrder?id='+@item.Id"/>
+                                                <input id="Button1" type="button" value="点击接单" onclick="location.href='/Admin/UpdOrder?id='+@item.Id"/>
                                             }
-                                            else if ((item.OrderType) == 1 && (item.Status) == 1)
+                                            else if ((item.OrderType) == 1 && (item.Status) == 3)
                                             {
                                                 <input id="Button1" type="button" value="点击发货" onclick="location.href='/Admin/UpdOrder1?id='+@item.Id" />
                                             }

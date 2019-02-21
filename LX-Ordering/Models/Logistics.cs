@@ -16,7 +16,7 @@ namespace LX_Ordering.Models
         [ForeignKey("Order")]
         public int Oid { get; set; }
         public virtual OrderInfo Order { get; set; }
-        //状态 待配送0 已配送1 已送达2
+        //状态 待接单0 待配送1 配送中2 已送达2
         [Display(Name ="状态")]
         public int Status { get; set; }
         //时间

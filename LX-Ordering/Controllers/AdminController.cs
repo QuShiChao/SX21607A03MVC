@@ -16,7 +16,14 @@ namespace LX_Ordering.Controllers
         //管理员主页面
         public ActionResult Index()
         {
-
+            ViewBag.count=OrderList.Count();
+            string total = (from a in OrderList
+                        group a by a.Id into t
+                        select new
+                        {
+                            Sum = t.Sum(a => a.Total)
+                        }).ToString();
+            ViewBag.sum = total;
             return View();
         }
         //注册
@@ -142,6 +149,7 @@ namespace LX_Ordering.Controllers
         //订单查看
         public ActionResult GetOrder()
         {
+           OrderList = OrderList.Where(s => s.Status != 0).ToList();
             return View(OrderList);
         }
         //订单修改
@@ -149,19 +157,30 @@ namespace LX_Ordering.Controllers
         {
             OrderInfo order = OrderList.Where(s => s.Id.Equals(id)).FirstOrDefault();
             order.Status = 3;
-            Upd(order);
+            Logistics logis = new Logistics();
+            logis.Oid = id;
+            logis.Status = 2;
+            logis.Ltime = DateTime.Now;
+            Upd(order,logis);
         }
         public void UpdOrder1(int id)
         {
             OrderInfo order = OrderList.Where(s => s.Id.Equals(id)).FirstOrDefault();
             order.Status = 2;
-            Upd(order);
+            Logistics logis = new Logistics();
+            logis.Oid = id;
+            logis.Status = 1;
+            logis.Ltime = DateTime.Now;
+            Upd(order,logis);
         }
-        private void Upd(OrderInfo order)
+        //修改订单和物流信息方法
+        private void Upd(OrderInfo order,Logistics logis)
         {
             string orderstr = JsonConvert.SerializeObject(order);
+            string logisstr = JsonConvert.SerializeObject(logis);
             int result = Convert.ToInt32(HttpClientHelper.SendRequest("api/OrderAPI/UpdOrder", "put", orderstr));
-            if (result > 0)
+            int result1 = Convert.ToInt32(HttpClientHelper.SendRequest("api/OrderAPI/AddLogistics", "post", logisstr));
+            if (result > 0 && result1 > 0)
             {
                 Response.Write("<script>alert('修改成功！');location.href='/Admin/';</script>");
             }
@@ -186,6 +205,7 @@ namespace LX_Ordering.Controllers
         {
             return View(EvalList);
         }
+        //删除评价
         public void DelEvaluate(int id)
         {
             var result =Convert.ToInt32(HttpClientHelper.ReferenceEquals("api/OrderAPI/DelEvaluate?id=" + id, "delete"));
