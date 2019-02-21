@@ -1,8 +1,10 @@
-﻿
+﻿@model IEnumerable<LX_Ordering.Models.EvaluateInfo>
 @{
-    ViewBag.Title = "LookEvaluate";
     Layout = "~/Views/AdminPage1.cshtml";
 }
+<link href="~/Class2/css/style.css" rel="stylesheet" />
+<script src="~/Class2/js/jquery.min.js"></script>
+<script src="~/Class2/js/bootstrap.min.js"></script>
 <div class="content-wrapper">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
@@ -15,42 +17,45 @@
                     <thead>
                         <tr>
                             <th>
-                                User
+                                用户
                             </th>
                             <th>
-                                First name
+                                昵称
                             </th>
                             <th>
-                                Progress
+                                菜品
                             </th>
                             <th>
-                                Amount
+                                评价时间
                             </th>
                             <th>
-                                Deadline
+                                评价内容
                             </th>
                         </tr>
                     </thead>
+                    @foreach (var item in Model)
+                    {
+                        <tbody>
+                            <tr>
+                                <td class="py-1">
+                                    <img src="~/ClassAdmin/images/faces-clipart/pic-1.png" alt="image" />
+                                </td>
+                                <td>
+                                    @item.Client.Name
+                                </td>
+                                <td>
+                                    @item.Dish.Name
+                                </td>
+                                <td>
+                                    @item.Evaluate
+                                </td>
+                                <td>
+                                    @item.ETime
+                                </td>
+                            </tr>
+                        </tbody>
+                    }
                     <tbody>
-                        <tr>
-                            <td class="py-1">
-                                <img src="~/ClassAdmin/images/faces-clipart/pic-1.png" alt="image" />
-                            </td>
-                            <td>
-                                Herman Beck
-                            </td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </td>
-                            <td>
-                                $ 77.99
-                            </td>
-                            <td>
-                                May 15, 2015
-                            </td>
-                        </tr>
                         <tr>
                             <td class="py-1">
                                 <img src="~/ClassAdmin/images/faces-clipart/pic-2.png" alt="image" />
@@ -167,6 +172,10 @@
                         </tr>
                     </tbody>
                 </table>
+                <button type="submit" class="btn btn-gradient-primary mr-2">
+                    <img src="~/ClassAdmin/images/好评.PNG" />
+                </button>
+                <button type="submit" class="btn btn-gradient-primary mr-2"><img src="~/ClassAdmin/images/差评.PNG" /></button>
             </div>
         </div>
     </div>

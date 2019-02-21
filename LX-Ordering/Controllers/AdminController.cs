@@ -11,9 +11,12 @@ namespace LX_Ordering.Controllers
 {
     public class AdminController : Controller
     {
+        List<OrderInfo> OrderList = CommonGet<OrderInfo>.GetList();//订餐系统
+        List<EvaluateInfo> EvalList = CommonGet<EvaluateInfo>.GetList();//评价系统
         //管理员主页面
         public ActionResult Index()
         {
+
             return View();
         }
         //注册
@@ -36,6 +39,11 @@ namespace LX_Ordering.Controllers
         {
             return 0;
         }
+        //菜肴操作页面
+        public ActionResult ShowCatagery()
+        {
+            return View();
+        }
         //添加菜系
         public ActionResult AddCatagery()
         {
@@ -46,8 +54,8 @@ namespace LX_Ordering.Controllers
         {
             string str = "api/OrderAPI/AddCata";
             var cata = JsonConvert.SerializeObject(catagery);
-            int result = Convert.ToInt32(HttpClientHelper.SendRequest(str, "post", cata));
-            if (result > 0)
+            int result=Convert.ToInt32(HttpClientHelper.SendRequest(str,"post",cata));
+            if (result>0)
             {
                 Response.Write("<script>alert('添加成功！');location.href='/Admin/';</script>");
             }
@@ -71,7 +79,7 @@ namespace LX_Ordering.Controllers
         }
         public void DelCatagery(int id)
         {
-            string str = "api/OrderAPI/DelCata?id=" + id;
+            string str = "api/OrderAPI/DelCata?id="+id;
             int result = Convert.ToInt32(HttpClientHelper.SendRequest(str, "delete"));
             if (result > 0)
             {
@@ -85,7 +93,7 @@ namespace LX_Ordering.Controllers
         //编辑菜系
         public ActionResult UpdCatagery(int id)
         {
-            List<Catagery> CataList = ShowCata().Where(s => s.Id.Equals(id)).ToList();
+            List<Catagery> CataList = ShowCata().Where(s=>s.Id.Equals(id)).ToList();
             return View(CataList);
         }
         [HttpPost]
@@ -104,81 +112,65 @@ namespace LX_Ordering.Controllers
             }
         }
         //添加菜色
-        public ActionResult AddDish(int id = 0)
+        public ActionResult AddDish()
         {
-            ViewBag.id = id;
             //获取菜系集合
             List<Catagery> cataList = CommonGet<Catagery>.GetList();
-            ViewBag.Cata = cataList;// new SelectList(cataList, "Id", "Name");
+            ViewBag.Cata = new SelectList(cataList, "Id", "Name");
             return View();
         }
-        public string UpdDish(int id)
+        [HttpPost]
+        public int AddDish(DishInfo dish)
         {
-            DishInfo dish = dishList.FirstOrDefault(d => d.Id.Equals(id));
-            string json = JsonConvert.SerializeObject(dish);
-            return json;
+            return 0;
+        }
+        //查看菜色
+        public ActionResult GetDish()
+        {
+            return View();
+        }
+        //编辑菜色信息
+        public ActionResult UpdDish(int id)
+        {
+            return View();
         }
         [HttpPost]
-        public void AddDish(DishInfo dish)
+        public int UpdDish(Catagery catagery)
         {
-            string json = JsonConvert.SerializeObject(dish);
-            string result = null;
-            if (dish.Id == 0)
-            {
-
-                result = HttpClientHelper.SendRequest("api/OrderAPI/AddDish", "post", json);
-
-            }
-            else
-            {
-                result = HttpClientHelper.SendRequest("api/OrderAPI/UpdDish", "put", json);
-            }
-            if (int.Parse(result) > 0)
-            {
-                Response.Write("<script>location.href='/Admin/';</script>");
-                //Response.Write("<script>layer.msg('OK');</script>");
-            }
-            else
-            {
-                Response.Write("<script>alert('×');location.href='/Admin/AddDish';</script>");
-            }
-        }
-        List<DishInfo> dishList = CommonGet<DishInfo>.GetList();
-        //查看菜肴信息
-        public ActionResult ShowDish(int pageIndex = 1, int pageSize = 8, string name = "")
-        {
-            if (name != "")
-            {
-                dishList = dishList.Where(d => d.Name.Contains(name)).ToList();
-            }
-            int count = dishList.Count;
-            ViewBag.pageCount = Math.Ceiling(count * 1.0 / pageSize);
-            ViewBag.pageIndex = pageIndex;
-            return View(dishList.Skip((pageIndex - 1) * pageSize).Take(pageSize * pageIndex));
-        }
-        //菜肴信息删除
-        public int DelDish(int id)
-        {
-            string result = HttpClientHelper.SendRequest("api/OrderAPI/DelDish?id=" + id, "delete");
-            if (result != "")
-            {
-                return int.Parse(result);
-            }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
         //订单查看
         public ActionResult GetOrder()
         {
-            return View();
+            return View(OrderList);
         }
         //订单修改
-        public ActionResult UpdOrder(int id)
+        public void UpdOrder(int id)
         {
-            return View();
+            OrderInfo order = OrderList.Where(s => s.Id.Equals(id)).FirstOrDefault();
+            order.Status = 3;
+            Upd(order);
         }
+        public void UpdOrder1(int id)
+        {
+            OrderInfo order = OrderList.Where(s => s.Id.Equals(id)).FirstOrDefault();
+            order.Status = 2;
+            Upd(order);
+        }
+        private void Upd(OrderInfo order)
+        {
+            string orderstr = JsonConvert.SerializeObject(order);
+            int result = Convert.ToInt32(HttpClientHelper.SendRequest("api/OrderAPI/UpdOrder", "put", orderstr));
+            if (result > 0)
+            {
+                Response.Write("<script>alert('修改成功！');location.href='/Admin/';</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('修改失败！');location.href='/Admin/';</script>");
+            }
+        }
+
         //经济收入页面
         public ActionResult GetIncome()
         {
@@ -192,10 +184,24 @@ namespace LX_Ordering.Controllers
         //菜色评价
         public ActionResult LookEvaluate()
         {
-            return View();
+            return View(EvalList);
+        }
+        public void DelEvaluate(int id)
+        {
+            var result =Convert.ToInt32(HttpClientHelper.ReferenceEquals("api/OrderAPI/DelEvaluate?id=" + id, "delete"));
+            if (result>0)
+            {
+                Response.Write("<script>alert('删除成功')</script>");
+                Response.Redirect("/Admin/LookEvaluate");
+            }
+            else
+            {
+                Response.Write("<script>alert('删除成功')</script>");
+                Response.Redirect("/Admin/LookEvaluate");
+            }
         }
         [HttpPost]
-        public int UpdOrder(OrderInfo order)
+        public int UpdOrder(OrderInfo order)//测试
         {
             return 0;
         }

@@ -256,6 +256,8 @@
     <Content Include="ClassAdmin\images\favicon.png" />
     <Content Include="ClassAdmin\images\logo-mini.svg" />
     <Content Include="ClassAdmin\images\logo.svg" />
+    <Content Include="ClassAdmin\images\好评.PNG" />
+    <Content Include="ClassAdmin\images\差评.PNG" />
     <Content Include="ClassAdmin\js\chart.js" />
     <Content Include="ClassAdmin\js\dashboard.js" />
     <Content Include="ClassAdmin\js\file-upload.js" />
