@@ -86,7 +86,7 @@ namespace LX_Ordering.Controllers
         public void Register(ClientInfo client,string Y="")
         {
             int result = 0;
-            if (Y != "1234")//验证码判断 Session["Random"].ToString()
+            if (Y != Session["Random"].ToString())//验证码判断 Session["Random"].ToString()
             {
                 Response.Write("<script>alert('验证码不正确')</script>");
             }
