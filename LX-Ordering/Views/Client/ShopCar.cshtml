@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<LX_Ordering.Models.OrderInfo>
 @{
     Layout = null;
 }
@@ -7,8 +7,11 @@
 
 <html>
 <head>
+
     <meta name="viewport" content="width=device-width" />
     <title>ShopCar</title>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
 
     <meta name="viewport" content="width=device-width" />
     <title>Contact</title>
@@ -76,8 +79,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <div class="cart box_1">
                         <a href="/Client/ShopCar">
                             <h3>
-                                <span class="simpleCart_total"> $0.00 </span>
-                                (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span> items)
+                                <span class="simpleCart_total" id="shopSum"> $0.00 </span>
+                                (<span id="simpleCart_quantity" class="simpleCart_quantity"> @ViewBag.orderNum </span> items)
                                 <img src="~/cpts_221_eq/images/bag.png" />
 
                             </h3>
@@ -96,112 +99,69 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     @*carItem*@
     <div class="cart-items">
         <div class="container">
-            <h1>总数量 (2)</h1>
-            <script>
-                $(document).ready(function (c) {
-                    $('.close1').on('click', function (c) {
-                        $('.cart-header').fadeOut('slow', function (c) {
-                            $('.cart-header').remove();
+            <h1> (@ViewBag.orderNum) 种商品 </h1>
+            <input id="checkedAll" type="checkbox"/>全选
+
+            @foreach (var item in Model)
+            {
+               
+                <script>
+                    $(document).ready(function (c) {
+                        $('.close1').on('click', function (c) {
+                            $('.cart-header').fadeOut('slow', function (c) {
+                                $('.cart-header').remove();
+                            });
                         });
                     });
-                });
-            </script>
-            <div class="cart-header">
-                <div class="close1"> </div>
-                <div class="cart-sec simpleCart_shelfItem">
-                    <div class="cart-item cyc">
-                        <img src="~/cpts_221_eq/images/6p.jpg" class="img-responsive" alt="" />
-                        <input id="Checkbox1" type="checkbox" class="ch" />
-                    </div>
-                    <div class="cart-item-info">
-                        <h3><a href="#"> 红烧鱼 </a><span style="font-size:larger;color:red">数量:3分</span></h3>
+                </script>
 
-                        <ul class="qty">
-                            <li><a class="morebtn hvr-rectangle-in" href="#">+</a></li>
-                            <li><a class="morebtn hvr-rectangle-in" href="#">-</a></li>
-                        </ul>
-                        <div class="delivery">
-                            <p>需要花费 : $10.00</p>
-                            <span>下单时间:</span>
-                            <div class="clearfix"></div>
+                <div class="cart-header">
+                    <div class="close1">
+                        @Ajax.ActionLink("移除", "DeleteOrder", new { id = item.Id }, new AjaxOptions() { Confirm = "是否确认删除？", OnSuccess = "del" })
+                       
+                    </div>
+                    <div class="cart-sec simpleCart_shelfItem">
+                        <div class="cart-item cyc">
+                            @*<img src="~/cpts_221_eq/images/6p.jpg" class="img-responsive" alt="" />*@
+                         
+                            <img src=" @item.Dish.Image" />
+                            <input id="Checkbox1" type="checkbox" class="ch" value="@item.Id" />
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
+                        <div class="cart-item-info">
+                            <h2><a href="#">  </a>@item.Dish.Name</h2>
+                            <h3><a href="#">  </a><span style="font-size:larger;color:red" class="num">@item.Num:份</span></h3>
+                            <h3><a href="#">  </a><span style="font-size:larger;color:red" class="price">单价 @item.Dish.Price:元</span></h3>
+                            <p>
 
-                </div>
-            </div>
-            <script>
-                $(document).ready(function (c) {
-                    $('.close2').on('click', function (c) {
-                        $('.cart-header2').fadeOut('slow', function (c) {
-                            $('.cart-header2').remove();
-                        });
-                    });
-                });
-            </script>
-            <div class="cart-header2">
-                <div class="close2"> </div>
-                <div class="cart-sec simpleCart_shelfItem">
-                    <div class="cart-item cyc">
-                        <img src="~/cpts_221_eq/images/8p.jpg" class="img-responsive" alt="" />
-                        <input id="Checkbox1" type="checkbox" class="ch" />
+                                <input id="Nums" type="hidden" value="@ViewBag.num" />
+                                <input id="Ids" type="hidden" value="@ViewBag.Ids" />
+                                <ul class="qty">
+                                    <li>
+                                        <a class="morebtn hvr-rectangle-in" href="#" onclick="shopNumAdd()">+</a>
 
-                    </div>
-                    <div class="cart-item-info">
-                        <h3><a href="#"> 蚂蚁上树 </a><span style="font-size:larger;color:red">数量:3分</span></h3>
-                        <ul class="qty">
-                            <li><a class="morebtn hvr-rectangle-in" href="#">+</a></li>
-                            <li><a class="morebtn hvr-rectangle-in" href="#">-</a></li>
-                        </ul>
-                        @*<div class="clearfix"> </div>*@
-                        <div class="delivery"></div>
+                                        @*<a class="morebtn hvr-rectangle-in" href="/Client/ShopNumAdd?Id=@item.Id">+</a>*@
+                                    </li>
+                                    <li>
+                                        <a class="morebtn hvr-rectangle-in" href="#" onclick="shopNumReduce()">-</a>
+                                        @*<a class="morebtn hvr-rectangle-in" href="/Client/ShopNumReduce?Id=@item.Id">-</a>*@
+                                    </li>
+                                </ul>
 
-                        <div class="delivery">
-                            <p>需要花费 : $10.00</p>
-                            <span>下单时间:2019-01-01</span>
-                            <div class="clearfix"></div>
+                            </p>
+
+                            <div class="delivery">
+
+                                <p>需要花费 :@(item.Num) * @(item.Dish.Price)元</p>
+                                <span>下单时间:@item.OrderTime </span>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
-
-                </div>
-            </div>
-            <script>
-                $(document).ready(function (c) {
-                    $('.close3').on('click', function (c) {
-                        $('.cart-header3').fadeOut('slow', function (c) {
-                            $('.cart-header3').remove();
-                        });
-                    });
-                });
-            </script>
-            <div class="cart-header3">
-                <div class="close3"> </div>
-                <div class="cart-sec simpleCart_shelfItem">
-                    <div class="cart-item cyc">
-                        <img src="~/cpts_221_eq/images/5p.jpg" class="img-responsive" alt="" />
-                        <input id="Checkbox1" type="checkbox" class="ch" />
-                    </div>
-                    <div class="cart-item-info">
-                        <h3><a href="#"> 红红紫紫 </a><span style="font-size:larger;color:red">数量:3分</span></h3>
-                        <ul class="qty">
-                            <li><a class="morebtn hvr-rectangle-in" href="#">+</a></li>
-                            <li>
-                                <a class="morebtn hvr-rectangle-in" href="#">+</a>
-                            </li>
-                        </ul>
-                        @*<div class="clearfix"> </div>*@
-                        <div class="delivery"></div>
-                    </div>
-                    <div class="delivery">
-                        <p>需要花费 : $10.00</p>
-                        <span>下单时间:</span>
                         <div class="clearfix"></div>
+
                     </div>
                 </div>
-                <div class="clearfix"></div>
-
-            </div>
+            }
+            
         </div>
 
 
@@ -211,13 +171,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="cur-left">
                     <div class="item_add">
                         <span class="item_price">
-                            <a class="morebtn hvr-rectangle-in" href="#">结算:</a>
+                            <a class="morebtn hvr-rectangle-in" href="#" onclick="GetTotal()">结算:</a>
                         </span>
                         <span class="item_price"></span>
                     </div>
                 </div>
                 <div class="cur-right">
-                    <div class="item_add"><span class="item_price"><h3 style="color:red">总金额: 45.00元</h3></span></div>
+                    <div class="item_add"><span class="item_price"><h3 style="color:red">总金额:  元</h3></span></div>
                 </div>
                 <div class="clearfix"> </div>
             </div>
@@ -235,3 +195,124 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
 </body>
 </html>
+<script>
+    function del(data) {
+        if (data > 0) {
+            alert('删除订单成功');
+            location.reload();
+        }
+        else {
+            alert('失败');
+        }
+    }
+
+    $(function () {
+
+        //$("inpudt[type='checkbox']").prop("checked", true);
+        //全选
+        $("#checkedAll").change(function () {
+            $(".ch").prop("checked", $("#checkedAll").prop("checked"));
+           
+            GetTotal();
+
+        })
+
+        $(".ch").click(function () {
+            var len = $(".ch").length;
+            var checkedLen = $(".ch:checked").length;
+            if (len == checkedLen) {
+                //商品全部选中
+                $("#checkedAll").prop("checked", true);
+            }
+            else
+            {
+                //只选择了一部分
+                $("#checkedAll").prop("checked", false);
+            }
+            GetTotal();
+        })
+
+
+    })
+    //计算总金额的方法
+    function GetTotal() {
+        var sums = 0;
+        $(".ch").each(function () {
+            if (this.checked == true) {
+                var shopNum = $(this).find(".num").val();
+                var shopPrice = $(this).find(".price").val();
+                sums += shopNum * shopPrice;
+            }
+        });
+
+        //总金额
+        $("#shopSum").text(sums);
+        //购买了多少个
+        var shopCount = $(".ch").length;
+        $("#simpleCart_quantity").text(shopCount)
+
+    }
+
+    //修改数量+
+    function shopNumAdd() {
+        var nums = $("#Nums").val();
+        var ids = $("#Ids").val();
+        $.ajax({
+            url: "http://localhost:62418/api/OrderAPI/UpdOrder",
+            type: "post",
+            dataType: "text",
+            data: { Id: ids, Num: nums },
+            success: function (data) {
+                nums++;
+                if (data > 0) {
+                    alert('添加数量成功')
+                }
+            }
+        })
+    }
+    //减数量
+    function shopNumReduce()
+    {
+        var nums = $("#Nums").val();
+        var ids = $("#Ids").val();
+        $.ajax({
+            url: "http://localhost:62418/api/OrderAPI/UpdOrder",
+            type: "post",
+            dataType: "text",
+            data: { Id: ids, Num: nums },
+            success: function (data) {
+                nums--;
+            }
+        })
+
+    }
+
+
+
+
+    //$(function () {
+
+       // $("#Nums").val('@ViewBag.Num');
+   // })
+    //function upNum(By) {
+    //    switch (By)
+    //    {
+    //        case '-':
+    //            if ($("#Nums").val() > 0)
+    //            {
+    //                var numberms = $("#Nums").val(Number($("#Nums").val()) - 1);
+    //                location.href = "/Client/ShopNumAdd?Id=" + $("#Ids").val() + "&Num=" + numberms;
+    //            }
+    //            else
+    //            {
+    //                alert('当前数量为0！数量不能小于0')
+    //            }
+    //            break;
+    //        case '+':
+    //            var numberms=$("#Nums").val(Number($("#Nums").val()) - 1);
+    //            location.href = "/Client/ShopNumAdd?Id=" + $("#Ids").val() + "&Num=" + numberms; 
+    //            break;
+    //        default:
+    //    }
+    //}
+</script>

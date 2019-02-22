@@ -53,7 +53,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <ul>
                         <li><a href="/Client/Index">主页</a></li>
                         <li><a href="/Client/Ordering">我的订单</a></li>
-                        <li><a href="/Client/Login">注册/登陆</a></li>
+                        @if (Session["Clientid"] == null)
+                        {
+                            <li><a href="/Client/Login">注册/登陆</a></li>
+                        }
+                        else
+                        {
+                            <li class="active"><a href="/Client/Login">@Session["ClientName"]</a></li>
+                        }
                         <li class="active"><a href="/Client/Contact">联系</a></li>
                         <div class="clearfix"> </div>
                     </ul>
@@ -88,35 +95,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     </div>
     <!-- contact -->
-    <div class="contact">
+    <div class="contact" style="background-color:azure">
         <div class="container">
             <div class="contact-head">
                 <h3>有问题请联系我们</h3>
             </div>
             <div class="contact-grid">
-                <form>
-                    <input type="text" placeholder="姓名" required />
-                    @*<input type="text" placeholder="E-mail" required />*@
-                    <input type="text" placeholder="手机号" required />
-                    <input type="text" placeholder="城市名" required />
-                    <textarea placeholder="短信"></textarea>
-                    <input type="submit" value="发送" />
-                </form>
+                @using (Html.BeginForm())
+                {
+                    <form>
+                        <input type="text" name="name" id="name" placeholder="姓名" required />
+                        @*<input type="text" placeholder="E-mail" required />*@
+                        <input type="text" name="tel" id="tel" placeholder="手机号" required />
+                        <input type="text" name="city" id="city" placeholder="城市名" required />
+                        <textarea placeholder="短信" name="remark" id="remark"></textarea>
+                        <input type="submit" id="btnSend" value="发送" />
+                    </form>
+                }
             </div>
             <div class="contact-details">
-                @*<div class="col-md-6 contact-map">
-                        <h4>FIND US HERE</h4>
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d803187.8113675824!2d-120.11910914056458!3d38.15292455846902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fb9fe5f285e3d%3A0x8b5109a227086f55!2sCalifornia%2C+USA!5e0!3m2!1sen!2sin!4v1423829283333" frameborder="0" style="border:0"></iframe>
-                    </div>*@
                 <div class="col-md-6 company_address">
-                    <h4>地址</h4>
-                    <p>500 Lorem Ipsum Dolor Sit,</p>
-                    <p>22-56-2-9 Sit Amet, Lorem,</p>
-                    <p>USA</p>
-                    <p>Phone:(00) 222 666 444</p>
-                    <p>Fax: (000) 000 00 00 0</p>
-                    <p>Email: <a href="mailto:info@example.com">info@mycompany.com</a></p>
-                    <p>Follow on: <a href="#">Facebook</a>, <a href="#">Twitter</a></p>
+                    <h4>联系方式</h4>
+                    <p>姓名:小短腿</p>
+                    <p>住址:上海市奉贤区海湾镇3389号</p>
+                    <p>手机号:15954563953</p>
+                    <p>邮箱:PikachuUncle@163.com</p>
+                    <p>微信号</p><img src="~/cpts_221_eq/images/WeiXin.png" style="height:150px;width:150px;" />
                 </div>
                 <div class="clearfix"></div>
             </div>

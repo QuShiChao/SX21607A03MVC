@@ -21,11 +21,8 @@ namespace LX_Ordering.Controllers
         {
             HttpClient client = new HttpClient();
 
-            client.BaseAddress = new Uri("http://localhost:62418/"); ;//设置http请求的地址
+            client.BaseAddress = new Uri("http://localhost:62418/");//设置http请求的地址
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//设置请求的数据传输格式
-
-
-
             HttpContent content = new StringContent(data);// 封装好要发送的数据
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");//设置发送的数据格式
 
