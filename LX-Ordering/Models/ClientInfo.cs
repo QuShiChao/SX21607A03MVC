@@ -48,5 +48,12 @@ namespace LX_Ordering.Models
         [Display(Name = "头像")]
         [Required(ErrorMessage = "不能为空")]
         public string HeadImage { get; set; }
+        [Display(Name = "支付密码")]
+        [Required(ErrorMessage = "不能为空")]
+        public string PayPwd { get; set; }
+        //账户余额
+        [Display(Name = "账户余额")]
+        [Required(ErrorMessage = "不能为空")]
+        public decimal Balance { get; set; }
     }
 }

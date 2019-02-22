@@ -1,4 +1,6 @@
 ﻿
+
+@model IEnumerable<LX_Ordering.Models.OrderInfo>
 @{
     Layout = null;
 }
@@ -160,15 +162,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 </div>
                             </div>
                             @*<div class="pick">
-                                <div class="boo-lef">
-                                    <i class="sele"></i>
-                                    <p>菜单</p>
-                                </div>
-                            </div>*@
+                                    <div class="boo-lef">
+                                        <i class="sele"></i>
+                                        <p>菜单</p>
+                                    </div>
+                                </div>*@
                             <div class="delv">
                                 <div class="boo-lef">
                                     <i class="ca-r"></i>
-                                    <p>购物车</p>
+                                    <a href="/Client/ShopCar"> <p>购物车</p></a>
+                                   
                                 </div>
                             </div>
                             <div class="clearfix"> </div>
@@ -330,9 +333,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
             </ul>
         </div>
+
+
+
         <div class="col-md-9">
+
             <ul class="feature">
-                <h3><i class="arrow"> </i><span>Today's Featured Products</span></h3>
+                <h3>
+                    <i class="arrow">
+                    </i><span>Today's Featured Products</span>
+                </h3>
             </ul>
             <ul class="feature_grid">
                 <li class="grid1">
@@ -340,10 +350,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <p>蛋汤清花</p>
                     <div class="price">
                         Price:
-                        <span class="actual">24.00元</span>
+                        <span class="actual">45 元</span>
                     </div>
                     <div class="but1">
-                        <a href="#">添加至购物车</a>
+                        @*<a href="">添加至购物车</a>*@
                     </div>
                 </li>
                 <li class="grid1">
@@ -354,7 +364,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span class="actual">30元</span>
                     </div>
                     <div class="but1">
-                        <a href="#">添加至购物车</a>
+                        @*<a href="#">添加至购物车</a>*@
                     </div>
                 </li>
                 <li class="grid2">
@@ -365,7 +375,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span class="actual">50元</span>
                     </div>
                     <div class="but1">
-                        <a href="#">添加至购物车</a>
+                        @*<a href="#">添加至购物车</a>*@
                     </div>
                 </li>
                 <div class="clearfix"> </div>
@@ -373,216 +383,223 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <ul class="feature">
                 <h3><i class="arrow"> </i><span>受欢迎的菜色</span></h3>
             </ul>
+            @foreach (var item in Model)
+            {
+                
+          
+                <div class="row content_bottom">
+                    <div class="col-md-3">
+                        <div class="content_box">
+                            <a href="/Client/SingleA">
+                                <div class="view view-fifth">
+                                    <img src="~/cpts_1115_bsp/images/p1.jpg" class="img-responsive" alt="" />
+                                    <img scr="@item.Dish.Image" />
+                                    <div class="content_box-grid">
+                                        <p class="m_1">@item.Dish.Name</p>
+                                        <div class="price">
+                                            
+                                            <span class="actual">@item.Dish.Price 元</span>
+                                        </div>
+                                        <ul class="product_but">
+                                            <li class="but3">
 
-
-            <div class="row content_bottom">
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
-                                <img src="~/cpts_1115_bsp/images/p1.jpg" class="img-responsive" alt="" />
-
-                                <div class="content_box-grid">
-                                    <p class="m_1">火腿汉堡包</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">45元</span>
-                                    </div>
-                                    <ul class="product_but">
-                                        <li class="but3">添加至购物车</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
+                                                @*@Html.ActionLink("Client", "AddToCar", new { id = item.Id })*@
+                                                <a href="/Client/AddToCar?Id=" @item.Id>添加至购物车</a> 
+                                            </li>
+                                            <li class="like"><span>120</span><i class="like1"> </i></li>
+                                            <div class="clearfix"> </div>
+                                        </ul>
+                                        <div class="mask">
+                                            <div class="info">quick view</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
+                    @*<div class="col-md-3">
+                            <div class="content_box">
+                                <a href="/Client/SingleA">
+                                    <div class="view view-fifth">
 
-                                <img src="~/cpts_1115_bsp/images/p3.jpg" class="img-responsive" alt="" />
+                                        <img src="~/cpts_1115_bsp/images/p3.jpg" class="img-responsive" alt="" />
 
-                                <div class="content_box-grid">
-                                    <p class="m_1">蛋叶</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">56元</span>
+                                        <div class="content_box-grid">
+                                            <p class="m_1">蛋叶</p>
+                                            <div class="price">
+                                                <span class="actual">56元</span>
+                                            </div>
+                                            <ul class="product_but">
+                                                <li class="but3">添加至购物车</li>
+                                                <li class="like"><span>120</span><i class="like1"> </i></li>
+                                                <div class="clearfix"> </div>
+                                            </ul>
+                                            <div class="mask">
+                                                <div class="info">quick view</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <ul class="product_but">
-                                        <li class="but3">添加至购物车</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="content_box">
+                                <a href="/Client/SingleA">
+                                    <div class="view view-fifth">
+                                        <img src="~/cpts_1115_bsp/images/tu1.jpg" class="img-responsive" alt="" />
+
+                                        <div class="content_box-grid">
+                                            <p class="m_1">米娜白蛋</p>
+                                            <div class="price">
+                                                price:
+                                                <span class="actual">80元</span>
+                                            </div>
+                                            <ul class="product_but">
+                                                <li class="but3">添加至购物车</li>
+                                                <li class="like"><span>120</span><i class="like1"> </i></li>
+                                                <div class="clearfix"> </div>
+                                            </ul>
+                                            <div class="mask">
+                                                <div class="info">quick view</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="content_box">
+                                <a href="/Client/SingleA">
+                                    <div class="view view-fifth">
+                                        <img src="~/cpts_1115_bsp/images/pic9.jpg" class="img-responsive" alt="" />
+
+                                        <div class="content_box-grid">
+                                            <p class="m_1">青叶宝宝</p>
+                                            <div class="price">
+                                                price:
+                                                <span class="actual">89元</span>
+                                            </div>
+                                            <ul class="product_but">
+                                                <li class="but3">添加至购物车</li>
+                                                <li class="like"><span>120</span><i class="like1"> </i></li>
+                                                <div class="clearfix"> </div>
+                                            </ul>
+                                            <div class="mask">
+                                                <div class="info">quick view</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>*@
+                </div>
+                @*<div class="row content_bottom1">
+                    <div class="col-md-3">
+                        <div class="content_box">
+                            <a href="/Client/SingleA">
+                                <div class="view view-fifth">
+                                    <img src="~/cpts_1115_bsp/images/p8.jpg" class="img-responsive" alt="" />
+
+                                    <div class="content_box-grid">
+                                        <p class="m_1">法国红酒</p>
+                                        <div class="price">
+                                            price:
+                                            <span class="actual">108元</span>
+                                        </div>
+                                        <ul class="product_but">
+                                            <li class="but3">添加至购物车</li>
+                                            <li class="like"><span>120</span><i class="like1"> </i></li>
+                                            <div class="clearfix"> </div>
+                                        </ul>
+                                        <div class="mask">
+                                            <div class="info">quick view</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
-                                <img src="~/cpts_1115_bsp/images/tu1.jpg" class="img-responsive" alt="" />
+                    <div class="col-md-3">
+                        <div class="content_box">
+                            <a href="/Client/SingleA">
+                                <div class="view view-fifth">
+                                    <img src="~/cpts_1115_bsp/images/p7.jpg" class="img-responsive" alt="" />
 
-                                <div class="content_box-grid">
-                                    <p class="m_1">米娜白蛋</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">80元</span>
-                                    </div>
-                                    <ul class="product_but">
-                                        <li class="but3">添加至购物车</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
+                                    <div class="content_box-grid">
+                                        <p class="m_1">甜蜜面</p>
+                                        <div class="price">
+                                            price:
+                                            <span class="actual">56元</span>
+                                        </div>
+                                        <ul class="product_but">
+                                            <li class="but3">添加至购物车</li>
+                                            <li class="like"><span>120</span><i class="like1"> </i></li>
+                                            <div class="clearfix"> </div>
+                                        </ul>
+                                        <div class="mask">
+                                            <div class="info">quick view</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
-                                <img src="~/cpts_1115_bsp/images/pic9.jpg" class="img-responsive" alt="" />
+                    <div class="col-md-3">
+                        <div class="content_box">
+                            <a href="/Client/SingleA">
+                                <div class="view view-fifth">
 
-                                <div class="content_box-grid">
-                                    <p class="m_1">青叶宝宝</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">89元</span>
-                                    </div>
-                                    <ul class="product_but">
-                                        <li class="but3">添加至购物车</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
+                                    <img src="~/cpts_1115_bsp/images/tu8.jpg" class="img-responsive" alt="" />
+
+                                    <div class="content_box-grid">
+                                        <p class="m_1">青草花</p>
+                                        <div class="price">
+                                            price:
+                                            <span class="actual">99元/份</span>
+                                        </div>
+                                        <ul class="product_but">
+                                            <li class="but3">添加至购物车</li>
+                                            <li class="like"><span>120</span><i class="like1"> </i></li>
+                                            <div class="clearfix"> </div>
+                                        </ul>
+                                        <div class="mask">
+                                            <div class="info">quick view</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row content_bottom1">
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
-                                <img src="~/cpts_1115_bsp/images/p8.jpg" class="img-responsive" alt="" />
+                    浏览
+                    <div class="col-md-3">
+                        <div class="content_box">
+                            <a href="/Client/SingleA">
+                                <div class="view view-fifth">
 
-                                <div class="content_box-grid">
-                                    <p class="m_1">法国红酒</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">108元</span>
-                                    </div>
-                                    <ul class="product_but">
-                                        <li class="but3">添加至购物车</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
+
+                                    <img src="~/cpts_1115_bsp/images/tu10.jpg" class="img-responsive" alt="" />
+                                    <div class="content_box-grid">
+                                        <p class="m_1">青椒汉堡</p>
+                                        <div class="price">
+                                            price:
+                                            <span class="actual">78元/份</span>
+                                        </div>
+                                        <ul class="product_but">
+                                            <li class="but3">购买</li>
+                                            <li class="like"><span>120</span><i class="like1"> </i></li>
+                                            <div class="clearfix"> </div>
+                                        </ul>
+                                        <div class="mask">
+                                            <div class="info">quick view</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
-                                <img src="~/cpts_1115_bsp/images/p7.jpg" class="img-responsive" alt="" />
+                </div>*@
+            }
 
-                                <div class="content_box-grid">
-                                    <p class="m_1">甜蜜面</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">56元</span>
-                                    </div>
-                                    <ul class="product_but">
-                                        <li class="but3">添加至购物车</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
-
-                                <img src="~/cpts_1115_bsp/images/tu8.jpg" class="img-responsive" alt="" />
-
-                                <div class="content_box-grid">
-                                    <p class="m_1">青草花</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">99元/份</span>
-                                    </div>
-                                    <ul class="product_but">
-                                        <li class="but3">添加至购物车</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                @*浏览*@
-                <div class="col-md-3">
-                    <div class="content_box">
-                        <a href="/Client/SingleA">
-                            <div class="view view-fifth">
-
-
-                                <img src="~/cpts_1115_bsp/images/tu10.jpg" class="img-responsive" alt="" />
-                                <div class="content_box-grid">
-                                    <p class="m_1">青椒汉堡</p>
-                                    <div class="price">
-                                        price:
-                                        <span class="actual">78元/份</span>
-                                    </div>
-                                    <ul class="product_but">
-                                        <li class="but3">购买</li>
-                                        <li class="like"><span>120</span><i class="like1"> </i></li>
-                                        <div class="clearfix"> </div>
-                                    </ul>
-                                    <div class="mask">
-                                        <div class="info">quick view</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
             <ul class="dc_pagination dc_paginationA dc_paginationA06">
                 <li><a href="#">1</a></li>
                 <li><a href="#" class="current">2</a></li>
@@ -594,6 +611,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li><a href="#">20</a></li>
                 <li><a href="#" class="previous">下一页></a></li>
                 <li><a href="#" class="next">上一页>></a></li>
+
+
+
             </ul>
         </div>
 
