@@ -52,5 +52,9 @@ namespace LX_Ordering.Models
         [Display(Name = "头像")]
         [Required(ErrorMessage = "不能为空")]
         public string HeadImage { get; set; }
+        [Display(Name="支付密码")]
+        public string PayPwd { get; set; }
+        [Display(Name ="余额")]
+        public decimal Balance { get; set; }
     }
 }

@@ -11,9 +11,12 @@ namespace LX_Ordering.Controllers
 {
     public class AdminController : Controller
     {
+        List<OrderInfo> OrderList = CommonGet<OrderInfo>.GetList();//订餐系统
+        List<EvaluateInfo> EvalList = CommonGet<EvaluateInfo>.GetList();//评价系统
         //管理员主页面
         public ActionResult Index()
         {
+
             return View();
         }
         //注册
@@ -101,7 +104,7 @@ namespace LX_Ordering.Controllers
         }
         public void DelCatagery(int id)
         {
-            string str = "api/OrderAPI/UpdCata?id="+id;
+            string str = "api/OrderAPI/DelCata?id="+id;
             int result = Convert.ToInt32(HttpClientHelper.SendRequest(str, "delete"));
             if (result > 0)
             {
@@ -164,13 +167,35 @@ namespace LX_Ordering.Controllers
         //订单查看
         public ActionResult GetOrder()
         {
-            return View();
+            return View(OrderList);
         }
         //订单修改
-        public ActionResult UpdOrder(int id)
+        public void UpdOrder(int id)
         {
-            return View();
+            OrderInfo order = OrderList.Where(s => s.Id.Equals(id)).FirstOrDefault();
+            order.Status = 3;
+            Upd(order);
         }
+        public void UpdOrder1(int id)
+        {
+            OrderInfo order = OrderList.Where(s => s.Id.Equals(id)).FirstOrDefault();
+            order.Status = 2;
+            Upd(order);
+        }
+        private void Upd(OrderInfo order)
+        {
+            string orderstr = JsonConvert.SerializeObject(order);
+            int result = Convert.ToInt32(HttpClientHelper.SendRequest("api/OrderAPI/UpdOrder", "put", orderstr));
+            if (result > 0)
+            {
+                Response.Write("<script>alert('修改成功！');location.href='/Admin/';</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('修改失败！');location.href='/Admin/';</script>");
+            }
+        }
+
         //经济收入页面
         public ActionResult GetIncome()
         {
@@ -184,7 +209,21 @@ namespace LX_Ordering.Controllers
         //菜色评价
         public ActionResult LookEvaluate()
         {
-            return View();
+            return View(EvalList);
+        }
+        public void DelEvaluate(int id)
+        {
+            var result =Convert.ToInt32(HttpClientHelper.ReferenceEquals("api/OrderAPI/DelEvaluate?id=" + id, "delete"));
+            if (result>0)
+            {
+                Response.Write("<script>alert('删除成功')</script>");
+                Response.Redirect("/Admin/LookEvaluate");
+            }
+            else
+            {
+                Response.Write("<script>alert('删除成功')</script>");
+                Response.Redirect("/Admin/LookEvaluate");
+            }
         }
         [HttpPost]
         public int UpdOrder(OrderInfo order)//测试

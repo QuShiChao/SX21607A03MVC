@@ -1,0 +1,119 @@
+﻿@model IEnumerable<LX_Ordering.Models.DishInfo>
+@{
+    ViewBag.Title = "ShowCatagery";
+    Layout = "~/Views/AdminPage1.cshtml";
+}
+
+<link href="~/Class2/css/style.css" rel="stylesheet" />
+<script src="~/Class2/js/jquery.min.js"></script>
+<script src="~/Class2/js/bootstrap.min.js"></script>
+
+
+<div class="content-wrapper">
+    <div class="col-md-9">
+        <div class="page-header">
+            <h3 class="page-title">
+                <span class="page-title-icon bg-gradient-primary text-white mr-2">
+                    <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                </span>
+                菜肴操作
+            </h3>
+            <form class="d-flex align-items-center h-100" action="/Admin/ShowDish">
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent ">
+                        <i class="input-group-text border-0 mdi mdi-magnify"></i>
+                    </div>
+                    <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects" name="name">
+
+                    <button class="btn btn-inverse-primary btn-fw" type="button" onclick="location.href='/Admin/AddDish'">添加菜色</button>
+                    <button class="btn btn-inverse-primary btn-fw" type="button" onclick="location.href='/Admin/AddCatagery'">添加菜系</button>
+                </div>
+            </form>
+        </div>
+        <div class="row content_bottom">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-3" style="margin-top:15px;">
+                    <div class="content_box">
+                        <a href="#">
+                            <div class="view view-fifth ">
+                                <img src="@item.Image" class="img-responsive" alt="" style="width:190px;height:140px;" onclick="location.href='/Admin/LookEvaluate'" />
+                                <div class="content_box-grid">
+                                    <p class="m_1">@item.Name</p>
+                                    <div class="price">
+                                        价格:
+                                        <span class="actual">@item.Price 元</span>
+                                    </div>
+                                    <ul class="product_but">
+                                        <li class="but3" onclick="location.href='/Admin/AddDish?id='+@item.Id">修改</li>
+                                        <li class="but3" style="float:right" onclick="Del(@item.Id)" id="del">@(item.Status == 3 ? "上架" : "下架")</li>
+                                    </ul>
+                                    <div class="mask">
+                                        <div class="info">Quick View</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+        <input id="pageIndex" type="hidden" value="@ViewBag.pageIndex" />
+        <input id="pageCount" type="hidden" value="@ViewBag.pageCount" />
+        <ul class="dc_pagination dc_paginationA dc_paginationA06">
+            <li><a href="/Admin/ShowDish?pageIndex=1" id="1">1</a></li>
+            <li><a href="/Admin/ShowDish?pageIndex=2" id="2">2</a></li>
+            <li><a href="/Admin/ShowDish?pageIndex=3" id="3">3</a></li>
+            <li><a href="/Admin/ShowDish?pageIndex=4" id="4">4</a></li>
+            <li><a href="/Admin/ShowDish?pageIndex=5" id="5">5</a></li>
+            <li><a href="/Admin/ShowDish?pageIndex=6" id="6">...</a></li>
+            <li><a href="/Admin/ShowDish?pageIndex=19" id="19">19</a></li>
+            <li><a href="/Admin/ShowDish?pageIndex=20" id="20">20</a></li>
+            <li><a href="#" class="next">Next>></a></li>
+            <li><a href="#" class="previous">Last>></a></li>
+        </ul>
+    </div>
+</div>
+<script>
+    var pageCount = $("#pageCount").val();
+    $(function () {
+        var pageIndex = $("#pageIndex").val();
+        $("#" + pageIndex).prop("class", "current");
+        //下一页
+        $(".previous").click(function () {
+            if (pageIndex > 1) {
+                pageIndex = Number(pageIndex) - 1;
+                $(this).prop("href", "/Admin/ShowDish?pageIndex=" + pageIndex);
+            }
+            else
+            {
+                $(this).prop("disabled",disabled);
+            }
+        })
+        //上一页
+        $(".next").click(function () {
+            if (pageIndex < pageCount) {
+                pageIndex = Number(pageIndex) + 1;
+                $(this).prop("href", "/Admin/ShowDish?pageIndex=" + pageIndex);
+            }
+            else {
+                $(this).attr("disabled", true);
+            }
+        })
+    })
+    function Del(id)
+    {
+        $.ajax({
+            url: '/Admin/DelDish?id=' + id,
+            dataType: 'text',
+            type: 'post',
+            success: function (data)
+            {
+                if (data > 0)
+                {
+                    location.reload();
+                }
+            }
+        })
+    }
+</script>
