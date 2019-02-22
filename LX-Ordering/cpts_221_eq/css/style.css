@@ -1101,6 +1101,9 @@ div.register-bottom-grid {
 
 /*----*/
 /*--contact--*/
+.contact {
+    background-color:azure;
+}
 .contact,.blog{
 	padding:4em 0;
 	

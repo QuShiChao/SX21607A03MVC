@@ -1,6 +1,5 @@
-﻿
+﻿@model IEnumerable<LX_Ordering.Models.OrderInfo>
 @{
-    ViewBag.Title = "Index";
     Layout = "~/Views/AdminPage1.cshtml";
 }
 
@@ -28,11 +27,11 @@
                 <div class="card-body">
                     <img src="~/ClassAdmin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                     <h4 class="font-weight-normal mb-3">
-                        Weekly Sales
+                        每周销售
                         <i class="mdi mdi-chart-line mdi-24px float-right"></i>
                     </h4>
                     <h2 class="mb-5">$ 15,0000</h2>
-                    <h6 class="card-text">Increased by 60%</h6>
+                    <h6 class="card-text">增加 60%</h6>
                 </div>
             </div>
         </div>
@@ -41,11 +40,11 @@
                 <div class="card-body">
                     <img src="~/ClassAdmin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                     <h4 class="font-weight-normal mb-3">
-                        Weekly Orders
+                        每周订单
                         <i class="mdi mdi-bookmark-outline mdi-24px float-right"></i>
                     </h4>
                     <h2 class="mb-5">45,6334</h2>
-                    <h6 class="card-text">Decreased by 10%</h6>
+                    <h6 class="card-text">增加 10%</h6>
                 </div>
             </div>
         </div>
@@ -54,11 +53,11 @@
                 <div class="card-body">
                     <img src="~/ClassAdmin/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                     <h4 class="font-weight-normal mb-3">
-                        Visitors Online
+                        在线访客
                         <i class="mdi mdi-diamond mdi-24px float-right"></i>
                     </h4>
                     <h2 class="mb-5">95,5741</h2>
-                    <h6 class="card-text">Increased by 5%</h6>
+                    <h6 class="card-text">增加 5%</h6>
                 </div>
             </div>
         </div>
@@ -67,102 +66,134 @@
         <div class="col-12 grid-margin">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Recent Tickets</h4>
+                    <h4 class="card-title">订单</h4>
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>
-                                        Assignee
+                                        用户
                                     </th>
                                     <th>
-                                        Subject
+                                        菜品
                                     </th>
                                     <th>
-                                        Status
+                                        总价
                                     </th>
                                     <th>
-                                        Last Update
+                                        订购类型
                                     </th>
                                     <th>
-                                        Tracking ID
+                                        联系方式
+                                    </th>
+                                    <th>
+                                        订购状态
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <img src="~/ClassAdmin/images/faces/face1.jpg" class="mr-2" alt="image">
-                                        David Grey
-                                    </td>
-                                    <td>
-                                        Fund is not recieved
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-gradient-success">DONE</label>
-                                    </td>
-                                    <td>
-                                        Dec 5, 2017
-                                    </td>
-                                    <td>
-                                        WD-12345
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="~/ClassAdmin/images/faces/face2.jpg" class="mr-2" alt="image">
-                                        Stella Johnson
-                                    </td>
-                                    <td>
-                                        High loading time
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-gradient-warning">PROGRESS</label>
-                                    </td>
-                                    <td>
-                                        Dec 12, 2017
-                                    </td>
-                                    <td>
-                                        WD-12346
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="~/ClassAdmin/images/faces/face3.jpg" class="mr-2" alt="image">
-                                        Marina Michel
-                                    </td>
-                                    <td>
-                                        Website down for one week
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-gradient-info">ON HOLD</label>
-                                    </td>
-                                    <td>
-                                        Dec 16, 2017
-                                    </td>
-                                    <td>
-                                        WD-12347
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <img src="~/ClassAdmin/images/faces/face4.jpg" class="mr-2" alt="image">
-                                        John Doe
-                                    </td>
-                                    <td>
-                                        Loosing control on server
-                                    </td>
-                                    <td>
-                                        <label class="badge badge-gradient-danger">REJECTED</label>
-                                    </td>
-                                    <td>
-                                        Dec 3, 2017
-                                    </td>
-                                    <td>
-                                        WD-12348
-                                    </td>
-                                </tr>
-                            </tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <img src="~/ClassAdmin/images/faces/face1.jpg" class="mr-2" alt="image">
+                                            @item.Client.HeadImage
+                                            @item.Client.Name
+                                        </td>
+                                        <td>
+                                            <label class="badge badge-gradient-success">@item.Dish.Name</label>
+                                        </td>
+                                        <td>
+                                            @item.Total
+                                        </td>
+                                        <td>
+                                            @if ((item.OrderType) == 0)
+                                            {
+                                                <label class="badge badge-gradient-warning">订餐</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="badge badge-gradient-danger">就餐</label>
+                                            }
+                                        </td>
+                                        <td>
+                                            @item.Client.Tel
+                                        </td>
+                                        <td>
+                                            @if ((item.Status) == 0)
+                                            {
+                                                <label style="color:#808080">未付款</label>
+                                            }
+                                            else if ((item.Status) == 1)
+                                            {
+                                                <label>已付款</label>
+                                            }
+                                            else if ((item.Status) == 2)
+                                            {
+                                                <label>运输中</label>
+                                            }
+                                            else if ((item.Status) == 3)
+                                            {
+                                                <label>未评价</label>
+                                            }
+                                            else if ((item.Status) == 4)
+                                            {
+                                                <label>已评价</label>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="~/ClassAdmin/images/faces/face2.jpg" class="mr-2" alt="image">
+                                            Stella Johnson
+                                        </td>
+                                        <td>
+                                            High loading time
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            Dec 12, 2017
+                                        </td>
+                                        <td>
+                                            WD-12346
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="~/ClassAdmin/images/faces/face3.jpg" class="mr-2" alt="image">
+                                            Marina Michel
+                                        </td>
+                                        <td>
+                                            Website down for one week
+                                        </td>
+                                        <td>
+                                            <label class="badge badge-gradient-info">ON HOLD</label>
+                                        </td>
+                                        <td>
+                                            Dec 16, 2017
+                                        </td>
+                                        <td>
+                                            WD-12347
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="~/ClassAdmin/images/faces/face4.jpg" class="mr-2" alt="image">
+                                            John Doe
+                                        </td>
+                                        <td>
+                                            Loosing control on server
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            Dec 3, 2017
+                                        </td>
+                                        <td>
+                                            WD-12348
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            }
                         </table>
                     </div>
                 </div>
