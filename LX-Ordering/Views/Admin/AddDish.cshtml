@@ -1,58 +1,144 @@
-﻿
+﻿@model LX_Ordering.Models.DishInfo
 @{
     ViewBag.Title = "AddDish";
     Layout = "~/Views/AdminPage1.cshtml";
 }
+<!--LayUi样式-->
+<link href="~/layui-v2.4.5/layui/css/layui.css" rel="stylesheet" media="all" />
+<!--Vue核心引用-->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/layui-v2.4.5/layui/layui.js"></script>
+<script src="~/ueditor/jquery-form.js"></script>
+<script src="~/ueditor/ueditor-upload.js"></script>
 <div class="content-wrapper">
     <div class="col-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">添加菜肴</h3>
+                <h3 class="card-title">菜肴管理</h3>
                 <p class="card-description">
-                    添加菜肴
+                    菜肴管理
                 </p>
-                <form class="forms-sample">
-                    <div class="form-group">
-                        <label for="exampleInputName1">Name</label>
-                        <input type="text" class="form-control" id="exampleInputName1" placeholder="Name">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail3">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword4">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword4" placeholder="Password">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleSelectGender">Gender</label>
-                        <select class="form-control" id="exampleSelectGender">
-                            <option>Male</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>File upload</label>
-                        <input type="file" name="img[]" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                            <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                            <span class="input-group-append">
-                                <button class="file-upload-browse btn btn-gradient-primary" type="button">Upload</button>
-                            </span>
+                <form class="layui-form" action="/Admin/AddDish" method="post">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜肴名称：</label>
+                        <div class="layui-input-block">
+                            <input id="Hidden1" type="hidden" name="Id" value="@ViewBag.Id" />
+                            <input type="text" name="Name" required lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input" id="Name">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputCity1">City</label>
-                        <input type="text" class="form-control" id="exampleInputCity1" placeholder="Location">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">所属菜系：</label>
+                        <div class="layui-input-block">
+                            <select name="Cid" lay-verify="required" id="Cid">
+                                <option value=""></option>
+                                @foreach (var item in ViewBag.Cata)
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+
+                                @*<option value="1">上海</option>
+                                    <option value="2">广州</option>
+                                    <option value="3">深圳</option>
+                                    <option value="4">杭州</option>*@
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleTextarea1">Textarea</label>
-                        <textarea class="form-control" id="exampleTextarea1" rows="4"></textarea>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜肴单价：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="Price" id="Price" required lay-verify="required" placeholder="请输入菜肴的单价" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-gradient-primary mr-2">添加</button>
-                    <button class="btn btn-light">返回</button>
+                    @*<div class="layui-form-item">
+                            <label class="layui-form-label">开关</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="switch" lay-skin="switch">
+                            </div>
+                        </div>*@
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜肴状态：</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="Status" id="Status1" value="0" title="正常供应" checked>
+                            <input type="radio" name="Status" id="Status2" value="1" title="稀缺">
+                            <input type="radio" name="Status" value="2" id="Status3" title="特色菜">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请上传图片：</label>
+                        <div class="layui-input-block">
+                            @*<input type="text" class="form-control" placeholder="请上传菜肴的图片" name="Image" id="Image">*@
+                            <input type="text" name="Image" required lay-verify="required" placeholder="请输入菜肴的图片" autocomplete="off" class="layui-input" id="Image">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">菜肴介绍：</label>
+                        <div class="layui-input-block">
+                            <textarea name="Intro" id="Intro" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即操作</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
                 </form>
+
+                <script>
+                    //Demo
+                    layui.use('form', function () {
+                        var form = layui.form;
+
+                        //监听提交
+                        form.on('submit(formDemo)', function (data) {
+                            layer.msg("OK");
+                            //return false;
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>
 </div>
+<script>
+    var id=@ViewBag.id;
+    $(function () {
+        //添加操作
+        if (id == 0) {
+            $("#Image").upload();
+        }
+        else
+        {
+            //反填
+            $.ajax({
+                url: '/Admin/UpdDish?id=' + id,
+                type: 'post',
+                dataType: 'json',
+                success: function (data)
+                {
+                    $("#Id").val(data.Id);
+                    $("#Name").val(data.Name);
+                    $("#Cid").val(data.Cid);
+                    $("#Price").val(data.Price);
+                    $("#Image").upload("/ueditor/net/", data.Image);
+                    $("#Intro").val(data.Intro);
+                    if (data.Status == 0) {
+                        $("#Status1").prop("checked", "true");
+                    }
+                    else if (data.Status == 1) {
+                        $("#Status2").prop("checked", "true");
+                    }
+                    else
+                    {
+                        $("#Status3").prop("checked", "true");
+                    }
+                    if (data.length > 0)
+                    {
+
+                    }
+                }
+            })
+        }
+    })
+</script>
