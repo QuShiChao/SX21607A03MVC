@@ -27,6 +27,10 @@ namespace LX_Ordering.Models
         [Required(ErrorMessage = "不能为空")]
         [RegularExpression("^.{4}$", ErrorMessage = "密码为4位字符")]
         public string Pwd { get; set; }
+        [Display(Name = "支付密码")]
+        [Required(ErrorMessage = "不能为空")]
+        [RegularExpression("^.{4}$", ErrorMessage = "密码为4位字符")]
+        public string PayPwd { get; set; }
         //省份Id
         [Display(Name ="地址")]
         [ForeignKey("P")]
@@ -48,6 +52,13 @@ namespace LX_Ordering.Models
         [Display(Name = "头像")]
         [Required(ErrorMessage = "不能为空")]
         public string HeadImage { get; set; }
+        [Display(Name = "支付密码")]
+        [Required(ErrorMessage = "不能为空")]
+        public string PayPwd { get; set; }
+        //账户余额
+        [Display(Name = "账户余额")]
+        [Required(ErrorMessage = "不能为空")]
+        public decimal Balance { get; set; }
         [Display(Name="支付密码")]
         public string PayPwd { get; set; }
         [Display(Name ="余额")]

@@ -1,4 +1,4 @@
-﻿
+﻿@model LX_Ordering.Models.ClientInfo
 @{
     Layout = null;
 }
@@ -31,6 +31,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/ueditor/jquery-form.js"></script>
+    <script src="~/ueditor/ueditor-upload.js"></script>
+
+    <script src="~/layui/layui.all.js"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+
 </head>
 <body>
     <div class="head-top">
@@ -85,66 +93,141 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </div>
 
     </div>
-    <div style="background-color:red;width:200px;height:200px;margin-top:50px;margin-left:100px;">
-        <input id="Button1" type="button" value="更换头像" />
-        <br />
-        <div style="width:80px;height:80px;border-radius:10px;background-color:aqua">
-            <img src="~/cpts_221_eq/images/4p.JPG" />
-        </div>
-    </div>
 
     @*注册*@
-    <div class="main-1">
+    <div class="main-1" style="background-color:azure">
         <div class="container">
             <div class="register">
-                <form>
-                    <div class="register-top-grid">
-                        <h3>注册个人信息</h3>
-                        <div class="wow fadeInLeft" data-wow-delay="0.4s">
-                            <span>头像<label>*</label></span>
-                            <input type="text">
-                        </div>
-                        <div class="wow fadeInLeft" data-wow-delay="0.4s">
-                            <span>姓名<label>*</label></span>
-                            <input type="text">
-                        </div>
-                        <div class="wow fadeInRight" data-wow-delay="0.4s">
-                            <span>手机号<label>*</label></span>
-                            <input type="text">
-                        </div>
-                        <div class="wow fadeInRight" data-wow-delay="0.4s">
-                            <span>邮箱<label>*</label></span>
-                            <input type="text">
-                        </div>
-                        <div class="clearfix"> </div>
-                        <a class="news-letter" href="#">
-                            <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>同意条款</label>
-                        </a>
-                    </div>
-                    <div class="register-bottom-grid">
-                        <h3>登陆密码</h3>
-                        <div class="wow fadeInLeft" data-wow-delay="0.4s">
-                            <span>密码<label>*</label></span>
-                            <input type="password">
-                        </div>
-                        <div class="wow fadeInRight" data-wow-delay="0.4s">
-                            <span>确认密码<label>*</label></span>
-                            <input type="password">
-                        </div>
-                    </div>
-                </form>
-                <div class="clearfix"> </div>
-                <div class="register-but">
-                    <form>
-                        <input type="submit" value="注册">
-                        <div class="clearfix"> </div>
-                    </form>
+                <div style="width:50%;margin-left:25%;margin-top:-100px;">
+                    @using (Html.BeginForm())
+                    {
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">头像</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="HeadImage" name="HeadImage" required lay-verify="required" placeholder="点击选择头像" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">姓名</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="Name" required lay-verify="required" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">省</label>
+                                <div class="layui-input-block">
+                                    <select id="Pid" name="Pid" lay-verify="required">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">市</label>
+                                <div class="layui-input-block">
+                                    <select id="Cid" name="Cid" lay-verify="required">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">县</label>
+                                <div class="layui-input-block">
+                                    <select id="Aid" name="Aid" lay-verify="required">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">详细地址</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="Addr" required lay-verify="required" placeholder="请输入详细地址" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">手机号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="Tel" required lay-verify="required" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">验证码</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="Y" required lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input" style="width:300px;display:inline">
+                                    <button class="layui-btn layui-btn-primary" onclick="loaction.href='/Client/GetYz'">发送验证码</button>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">账号密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="Pwd" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:100px;">支付密码</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="PayPwd" required lay-verify="required" placeholder="请输入支付密码" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>同意条款</label>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input class="layui-btn" type="submit" value="立即注册" />
+                                    <a class="layui-btn " href="/Client/Login">已有账号去登录</a>
+                                </div>
+                            </div>
+                        </form>
+                    }
                 </div>
             </div>
         </div>
     </div>
-
     <div>
     </div>
 </body>
 </html>
+<script>
+    $(function () {
+        $("#HeadImage").upload();
+
+        GetDrop(0, "Pid");
+        $("#Pid").change(function () {
+            GetDrop($(this).val(), "Cid");
+            //GetDrop($("#Cid").val(), "Aid");
+            $("#Aid").empty();
+            $("#Aid").append("<option>请选择</option>");
+        })
+        $("#Cid").change(function () {
+            GetDrop($(this).val(), "Aid");
+        })
+    })
+    function GetDrop(id, SelectId) {
+        $.ajax({
+            url: "/Client/GetDropList?id=" + id,
+            type: 'get',
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    $("#" + SelectId).empty();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#" + SelectId).append("<option value=" + data[i].Id + ">" + data[i].Name + "</option>");
+                    }
+                }
+            }
+        })
+    }
+    //Demo
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>

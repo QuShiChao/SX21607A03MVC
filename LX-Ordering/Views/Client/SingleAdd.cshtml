@@ -1,0 +1,51 @@
+﻿@model IEnumerable<LX_Ordering.Models.EvaluateInfo>
+@{
+    //ViewBag.Title = "SingleAdd";
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    @*<link href="~/ClassAdmin/vendors/iconfonts/mdi/css/materialdesignicons.min.css" rel="stylesheet" />
+        <link href="~/ClassAdmin/vendors/css/vendor.bundle.base.css" rel="stylesheet" />*@
+    <link href="~/ClassAdmin/css/style.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">填写评价</h3>
+                    <form class="forms-sample">
+                        @*<input id="Hidden1" type="hidden" value="@ViewBag.Did" />*@
+                        <div class="form-group">
+                            <label for="exampleTextarea1">评价内容</label>
+                            <textarea class="form-control" id="remark" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            @*<button type="submit" class="btn btn-gradient-primary mr-2" style="background-image:url(/ClassAdmin/images/好评.PNG)"></button>
+                                <button type="submit" class="btn btn-light" style="background-image:url(/ClassAdmin/images/差评.PNG)"></button>*@
+                            <img src="~/ClassAdmin/images/好评1.PNG" onclick="Up()" id="good" />        <img src="~/ClassAdmin/images/差评1.PNG" onclick="Down()" id="bad" />
+                        </div>
+                        <button type="submit" class="btn btn-gradient-primary mr-2">确认</button>
+                        <button type="submit" class="btn btn-light">返回</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    function Up() {
+        document.getElementById("good").src = "~/ClassAdmin/images/好评.PNG";
+        //$("#good").src("~/ClassAdmin/images/好评.PNG");
+        $("#bad").prop("disabled", "true");
+    }
+    function Down() {
+        $("#bad").attr("src", "~/ClassAdmin/images/差评.PNG");
+        $("#good").prop("disabled", "true");
+    }
+</script>

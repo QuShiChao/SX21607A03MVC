@@ -1,0 +1,137 @@
+﻿@model IEnumerable<LX_Ordering.Models.Logistics>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html, #allmap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+        #l-map {
+            height: 170px;
+            width: 60%;
+            margin:0 auto;
+        }
+        /*#r-result, #r-result table {
+            height: 350px;
+            width: 90%;
+            margin: 0 auto;
+        }*/
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=6NLdErRYixAGme6rnvuT2vyQorUC3PUG"></script>
+    <title>乐享点餐</title>
+</head>
+<body>
+    <div style="width:100%;height:50%">
+        <div id="allmap"></div>
+        <div id="l-map">
+            <h4 style="color:darkorange">配送状态:</h4>
+            @foreach (var item in Model)
+            {
+                if ((item.Status) == 0)
+                {
+                    <img src="~/ClassAdmin/images/待接单.png" />
+                    <div style="width:90%;height:300px;background-color:#c2b8b8">
+                        <ul>
+                            <li> @item.Ltime  |  你的订单·@item.Status </li>
+                        </ul>
+                    </div>
+                }
+                else if ((item.Status) == 1)
+                {
+                    <img src="~/ClassAdmin/images/待接单.png" />
+                    <img src="~/ClassAdmin/images/待配送.gif" />
+                    <div style="width:90%;height:300px;background-color:#c2b8b8">
+                        <ul>
+                            <li> @item.Ltime  |  你的订单·@item.Status </li>
+                        </ul>
+                    </div>
+                }
+                else if ((item.Status == 2))
+                {
+                    <img src="~/ClassAdmin/images/待接单.png" />
+                    <img src="~/ClassAdmin/images/待配送.gif" />
+                    <img src="~/ClassAdmin/images/派送中.png" />
+                    <ul>
+                        <li> @item.Ltime  |  你的订单·@item.Status </li>
+                    </ul>
+                }
+                else
+                {
+                    <img src="~/ClassAdmin/images/待接单.png" />
+                    <img src="~/ClassAdmin/images/待配送.gif" />
+                    <img src="~/ClassAdmin/images/派送中.png" />
+                    <img src="~/ClassAdmin/images/已签收.gif" />
+                    <ul>
+                        <li> @item.Ltime  |  你的订单·@item.Status </li>
+                    </ul>
+                }
+            }
+
+        </div>
+        @*<div id="r-result"></div>*@
+    </div>  
+</body>
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+    map.centerAndZoom(new BMap.Point(121.701, 30.878), 18);  // 初始化地图,设置中心点坐标和地图级别
+    //添加地图类型控件
+    map.addControl(new BMap.MapTypeControl({
+        mapTypes: [
+            BMAP_NORMAL_MAP,
+            BMAP_HYBRID_MAP
+        ]
+    }));
+    map.setCurrentCity("上海");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+    //动态坐标跳动功能
+    var point = new BMap.Point(121.701, 30.878);
+    map.centerAndZoom(point, 15);
+    var marker = new BMap.Marker(point);  // 创建标注
+    map.addOverlay(marker);               // 将标注添加到地图中
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+    var output = "从上海教卫青少年社会实践基地到外滩需要";
+    var searchComplete = function (results) {
+        if (transit.getStatus() != BMAP_STATUS_SUCCESS) {
+            return;
+        }
+        var plan = results.getPlan(0);
+        output += plan.getDuration(true) + "\n";  //获取时间
+        output += plan.getDistance(true) + "\n";  //获取距离
+    }
+
+    //信息提示功能
+    var sContent = "乐享订餐，让您享受不一样的快感...";
+    var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+    map.openInfoWindow(infoWindow, point); //开启信息窗口
+
+    //路线功能
+    var transit = new BMap.DrivingRoute(map, {
+        renderOptions: {
+            map: map,
+            //panel: "r-result",
+            enableDragging: true //起终点可进行拖拽
+        },
+        onSearchComplete: searchComplete,
+        onPolylinesSet: function () {
+            setTimeout(function () { alert(output) });
+        }
+    });
+    transit.search("上海教卫青少年社会实践基地", "外滩");
+</script>

@@ -1,4 +1,7 @@
 ﻿
+@model IEnumerable<LX_Ordering.Models.OrderInfo>
+
+
 @{
     Layout = null;
 }
@@ -10,7 +13,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>Ordering</title>
     @*head*@
-    <title>Spicemystery a Hotel and Resturant Category Flat Bootstarp Responsive Website Template | Home :: w3layouts</title>
+   
     <link href="~/cpts_221_eq/css/bootstrap.css" rel="stylesheet" />
     <link href="~/cpts_221_eq/css/style.css" rel="stylesheet" />
     <script src="~/cpts_221_eq/js/jquery.min.js"></script>
@@ -122,33 +125,38 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
     <div class="cart-items">
         <div class="container">
-            <h1>总数量 (2)</h1>
-
+         
+            <h1>总数量 </h1>
+         
             <div class="cart-header">
+                @foreach (var item in Model)
+                {
+                    <h1>@item.Num</h1>
 
-                <div class="cart-sec simpleCart_shelfItem">
-                    <div class="cart-item cyc">
-                        <img src="~/cpts_221_eq/images/6p.jpg" class="img-responsive" alt="" />
-
-                    </div>
-                    <div class="cart-item-info">
-                        <h3>
-                            <a href="#"> 红烧鱼 </a>
-                            <span style="font-size:larger;color:red">数量:3分</span>
-                            <span style="font-size:larger;color:red">当前所在地址:</span>
-                        </h3>
-
-
-                        <div class="delivery">
-                            <p>需要花费 : $10.00</p> <br />
-                            <p>下单时间:</p>
-
-                            <div class="clearfix"></div>
+                    <div class="cart-sec simpleCart_shelfItem">
+                        <div class="cart-item cyc">
+                            <img src="~/cpts_221_eq/images/6p.jpg" class="img-responsive" alt="" />
+                            
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
+                        <div class="cart-item-info">
+                            <h3>
+                                <a href="#"> @item.Dish.Name </a>
+                                <span style="font-size:larger;color:red">数量:@item.Num 份</span>
+                                <span style="font-size:larger;color:red">当前所在地址: @item.Client.Addr</span>
+                            </h3>
 
-                </div>
+
+                            <div class="delivery">
+                                <p>需要花费 : @(item.Num*(item.Dish.Price))</p> <br />
+                                <p>下单时间:@item.OrderTime</p>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div>
+                }
             </div>
 
             <div class="cart-header2">

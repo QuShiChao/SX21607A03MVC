@@ -32,9 +32,23 @@ namespace LX_Ordering.Controllers
             return View();
         }
         [HttpPost]
-        public int AdminRegist(AdministratorInfo admin)
+        public ActionResult AdminRegist(AdministratorInfo admin,string Zid,string Key)
         {
-            return 0;
+            int result = 0;
+            if (Zid == "123456" && Key == "123456")
+            {
+                string json = JsonConvert.SerializeObject(admin);
+                result = Int32.Parse(HttpClientHelper.SendRequest("api/OrderAPI/AddAdmin", "post", json));
+            }
+            if (result > 0)
+            {
+                Response.Write("<script>alert('注册成功');location.href='AdminLogin'</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('注册失败')</script>");
+            }
+            return View();
         }
         //登录
         public ActionResult AdminLogin()
@@ -42,9 +56,20 @@ namespace LX_Ordering.Controllers
             return View();
         }
         [HttpPost]
-        public int AdminLogin(AdministratorInfo admin)
+        public ActionResult AdminLogin(string name,string pwd)
         {
-            return 0;
+            List<AdministratorInfo> client = CommonGet<AdministratorInfo>.GetList();
+            int result = client.Where(c => c.Name.Equals(name) && c.Pwd.Equals(pwd)).Count();//查询是否存在
+            if (result > 0)
+            {
+                Session["AdminName"] = client.FirstOrDefault().Name;
+                Response.Write("<script>alert('登陆成功');location.href='Index'</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('登陆失败')</script>");
+            }
+            return View();
         }
         //菜肴操作页面
         public ActionResult ShowCatagery()
