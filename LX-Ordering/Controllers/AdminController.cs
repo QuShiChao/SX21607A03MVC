@@ -17,7 +17,7 @@ namespace LX_Ordering.Controllers
         public ActionResult Index()
         {
 
-            return View();
+            return View(OrderList);
         }
         //注册
         public ActionResult AdminRegist()
@@ -112,32 +112,70 @@ namespace LX_Ordering.Controllers
             }
         }
         //添加菜色
-        public ActionResult AddDish()
+        public ActionResult AddDish(int id = 0)
         {
+            ViewBag.id = id;
             //获取菜系集合
             List<Catagery> cataList = CommonGet<Catagery>.GetList();
-            ViewBag.Cata = new SelectList(cataList, "Id", "Name");
+            ViewBag.Cata = cataList;// new SelectList(cataList, "Id", "Name");
             return View();
+        }
+        public string UpdDish(int id)
+        {
+            DishInfo dish = dishList.FirstOrDefault(d => d.Id.Equals(id));
+            string json = JsonConvert.SerializeObject(dish);
+            return json;
         }
         [HttpPost]
-        public int AddDish(DishInfo dish)
+        public void AddDish(DishInfo dish)
         {
-            return 0;
+            string json = JsonConvert.SerializeObject(dish);
+            string result = null;
+            if (dish.Id == 0)
+            {
+
+                result = HttpClientHelper.SendRequest("api/OrderAPI/AddDish", "post", json);
+
+            }
+            else
+            {
+                result = HttpClientHelper.SendRequest("api/OrderAPI/UpdDish", "put", json);
+            }
+            if (int.Parse(result) > 0)
+            {
+                Response.Write("<script>location.href='/Admin/';</script>");
+                //Response.Write("<script>layer.msg('OK');</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('×');location.href='/Admin/AddDish';</script>");
+            }
         }
-        //查看菜色
-        public ActionResult GetDish()
+        List<DishInfo> dishList = CommonGet<DishInfo>.GetList();
+        //查看菜肴信息
+        public ActionResult ShowDish(int pageIndex = 1, int pageSize = 8, string name = "")
         {
-            return View();
+            if (name != "")
+            {
+                dishList = dishList.Where(d => d.Name.Contains(name)).ToList();
+            }
+            int count = dishList.Count;
+            ViewBag.pageCount = Math.Ceiling(count * 1.0 / pageSize);
+            ViewBag.pageIndex = pageIndex;
+            return View(dishList.Skip((pageIndex - 1) * pageSize).Take(pageSize * pageIndex));
         }
-        //编辑菜色信息
-        public ActionResult UpdDish(int id)
+        //菜肴信息删除
+        public int DelDish(int id)
         {
-            return View();
-        }
-        [HttpPost]
-        public int UpdDish(Catagery catagery)
-        {
-            return 0;
+            string result = HttpClientHelper.SendRequest("api/OrderAPI/DelDish?id=" + id, "delete");
+            if (result != "")
+            {
+                return int.Parse(result);
+            }
+            else
+            {
+                return 0;
+            }
         }
         //订单查看
         public ActionResult GetOrder()
