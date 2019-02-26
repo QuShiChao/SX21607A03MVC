@@ -96,20 +96,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <div class="register-top-grid">
                             <h3>注册管理员</h3>
                             <div class="wow fadeInLeft" data-wow-delay="0.4s">
-                                <span>账号<label>*</label></span>
+                                <span>账号用户名<label>*</label></span>
                                 @Html.TextBoxFor(Model => Model.Name)
                             </div>
                             <div class="wow fadeInLeft" data-wow-delay="0.4s">
                                 <span>密码<label>*</label></span>
-                                @Html.TextBoxFor(Model => Model.Pwd)
+                                @Html.PasswordFor(Model => Model.Pwd)
                             </div>
                             <div class="wow fadeInLeft" data-wow-delay="0.4s">
                                 <span>主号<label>*</label></span>
-                                @Html.TextBox("Zid")
+                                @Html.Password("Zid")
                             </div>
                             <div class="wow fadeInLeft" data-wow-delay="0.4s">
                                 <span>密令<label>*</label></span>
-                                @Html.TextBox("Key")
+                                @Html.Password("Key")
                             </div>
                             <input type="submit" class="btn" value="注册">
                             <div class="clearfix"> </div>

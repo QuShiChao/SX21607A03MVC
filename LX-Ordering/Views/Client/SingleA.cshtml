@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<LX_Ordering.Models.EvaluateInfo>
+@using LX_Ordering.Models
 @{
     Layout = null;
 }
@@ -135,15 +136,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 </div>
                 <div class="header-right1">
                     <div class="cart box_1">
-                        <a href="/CMS/ShopCar">
+                        <a href="/Client/ShopCar">
                             <h3>
                                 <span class="simpleCart_total"> 0.00元 </span>
                                 (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span> items)
                                 <img src="~/cpts_221_eq/images/bag.png" />
-                              
+
                             </h3>
                         </a>
-                        <p><a href="javascript:;" class="simpleCart_empty">清空购物车</a></p>
+                        <p><a href="/Client/EmptyCar?id=@Session["Clientid"]" class="simpleCart_empty">清空购物车</a></p>
                         <div class="clearfix"> </div>
                     </div>
                 </div>
@@ -192,20 +193,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </ul>
         </div>
         <div class="single_right">
-            <h3>汉堡包 </h3>
-            <p class="m_5">它很美味</p>
+            
+            <h3>@((ViewBag.dish as DishInfo).Name)</h3>
+            <p class="m_5">@((ViewBag.dish as DishInfo).Intro)</p>
             <div class="price_single">
                 <span class="reducedfrom">$66.00</span>
-                <span class="actual1">30元</span><a href="#">点击购买</a>
+                <span class="actual1">@((ViewBag.dish as DishInfo).Price)元</span>
             </div>
 
             <div class="btn_form">
-                <form>
-                    <input type="submit" value="现在购买" title="">
-                </form>
+                <input type="button" value="加入购物车" onclick="location.href='/Client/AddToCar?Id='+@((ViewBag.dish as DishInfo).Id)">
+                    <input type="button" value="现在购买" title="">
+                
             </div>
             <ul class="add-to-links">
-                <li><img src="~/cpts_1115_bsp/images/wish.png" alt=""><a href="#">点赞</a></li>
+                <li>@*<img src="~/cpts_1115_bsp/images/wish.png" alt=""><a href="#">点赞</a>*@销量@((ViewBag.dish as DishInfo).OrderNums)</li>
             </ul>
             <div class="col-xs-12  col-sm-6  col-md-4">
                 <div class="banners--small  banners--small--social">
@@ -259,8 +261,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 </div>
                                 <div class="media-left">
                                     <a href="#">
-                                        @*<img src="~/cpts_881_bli/images/si1.jpg" alt="" />*@
-                                        @item.Client.HeadImage
+                                        <img src="@item.Client.HeadImage" alt="" style="border-radius:initial; height:50px; width:50px;" />
                                     </a>
                                 </div>
                                 <div class="media-body">
@@ -269,60 +270,109 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 </div>
                             </div>
                         }
-                        <div class="media media-1 wow fadeInUp animated" data-wow-delay=".5s">                   
+                        <div class="media media-1 wow fadeInUp animated" data-wow-delay=".5s">
+                            <div class="media wow fadeInLeft animated" data-wow-delay=".5s">
+                                <div class="code-in">
+                                    <p class="smith"><a href="#">张三</a> <span>2018-20-10</span></p>
+                                    <div class="clearfix"> </div>
+                                </div>
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img src="~/cpts_881_bli/images/si1.jpg" alt="" />
+                                    </a>
+                                </div>
+                                <div class="media-body">
+
+                                    <p>的世界很疯狂技术的开发角度思考京东回复即可收到回复即可但是很多事空军飞虎队是等级划分会计师大后方空间顺丰单号发</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media media-1 wow fadeInUp animated" data-wow-delay=".5s">
+                            <div class="media wow fadeInLeft animated" data-wow-delay=".5s">
+                                <div class="code-in">
+                                    <p class="smith"><a href="#">张三</a> <span>2018-20-10</span></p>
+                                    <div class="clearfix"> </div>
+                                </div>
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img src="~/cpts_881_bli/images/si1.jpg" alt="" />
+                                    </a>
+                                </div>
+                                <div class="media-body">
+
+                                    <p>的世界很疯狂技术的开发角度思考京东回复即可收到回复即可但是很多事空军飞虎队是等级划分会计师大后方空间顺丰单号发</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="media media-1 wow fadeInUp animated" data-wow-delay=".5s">
+                            <div class="media wow fadeInLeft animated" data-wow-delay=".5s">
+                                <div class="code-in">
+                                    <p class="smith"><a href="#">张三</a> <span>2018-20-10</span></p>
+                                    <div class="clearfix"> </div>
+                                </div>
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img src="~/cpts_881_bli/images/si1.jpg" alt="" />
+                                    </a>
+                                </div>
+                                <div class="media-body">
+
+                                    <p>的世界很疯狂技术的开发角度思考京东回复即可收到回复即可但是很多事空军飞虎队是等级划分会计师大后方空间顺丰单号发</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <!---->
+                    <!--//content-->
+
                 </div>
-                <!---->
-                <!--//content-->
-
-            </div>
-            <div class="col-md-3 categories-grid">
+                <div class="col-md-3 categories-grid">
 
 
-                <div class="blog-bottom animated wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="500ms">
-                    <h4>客户评价</h4>
-                    <div class="product-go">
-                        <a href="single.html" class="fashion">
-                            <img class="img-responsive " src="~/cpts_881_bli/images/bo.jpg" alt="" />
+                    <div class="blog-bottom animated wow fadeInUp" data-wow-duration="1000ms" data-wow-delay="500ms">
+                        <h4>客户评价</h4>
+                        <div class="product-go">
+                            <a href="single.html" class="fashion">
+                                <img class="img-responsive " src="~/cpts_881_bli/images/bo.jpg" alt="" />
 
-                        </a>
-                        <div class="grid-product">
-                            <a href="/CMS/SingleA" class="elit">大排</a>
-                            <p>回味无穷</p>
+                            </a>
+                            <div class="grid-product">
+                                <a href="/CMS/SingleA" class="elit">大排</a>
+                                <p>回味无穷</p>
+                            </div>
+                            <div class="clearfix"> </div>
                         </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="product-go">
-                        <a href="single.html" class="fashion">
-                            <img class="img-responsive " src="~/cpts_881_bli/images/bo1.jpg" alt="" />
+                        <div class="product-go">
+                            <a href="single.html" class="fashion">
+                                <img class="img-responsive " src="~/cpts_881_bli/images/bo1.jpg" alt="" />
 
-                        </a>
-                        <div class="grid-product">
-                            <a href="/CMS/SingleA" class="elit">面包蛋糕</a>
-                            <p>补充能量</p>
+                            </a>
+                            <div class="grid-product">
+                                <a href="/CMS/SingleA" class="elit">面包蛋糕</a>
+                                <p>补充能量</p>
+                            </div>
+                            <div class="clearfix"> </div>
                         </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                    <div class="product-go">
-                        <a href="/CMS/SingleA" class="fashion">
-                            <img class="img-responsive " src="~/cpts_881_bli/images/bo2.jpg" alt="" />
+                        <div class="product-go">
+                            <a href="/CMS/SingleA" class="fashion">
+                                <img class="img-responsive " src="~/cpts_881_bli/images/bo2.jpg" alt="" />
 
-                        </a>
-                        <div class="grid-product">
-                            <a href="single.html" class="elit">火火</a>
-                            <p>酸辣可口</p>
+                            </a>
+                            <div class="grid-product">
+                                <a href="single.html" class="elit">火火</a>
+                                <p>酸辣可口</p>
+                            </div>
+                            <div class="clearfix"> </div>
                         </div>
-                        <div class="clearfix"> </div>
                     </div>
+
                 </div>
-
+                <div class="clearfix"> </div>
             </div>
-            <div class="clearfix"> </div>
         </div>
-    </div>
 
 
-    <div>
-    </div>
+        <div>
+        </div>
 </body>
 </html>

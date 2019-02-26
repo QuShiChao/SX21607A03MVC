@@ -1,14 +1,29 @@
-$(function() {
+$(function () {
+    var time = [];
+    var money = [];
+    $.ajax({
+        url: '/Admin/ShowMoney',
+        type: 'get',
+        content:'application/json',
+        dataType: 'json',
+        success: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                time.push(data[i].Time);
+                money.push(data[i].Sum);
+                alert(data);
+            }
+        }
+    })
   /* ChartJS
    * -------
    * Data and config for chartjs
    */
   'use strict';
   var data = {
-    labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
+    labels: time,
     datasets: [{
-      label: '# of Votes',
-      data: [10, 19, 3, 5, 2, 3],
+        label: '# of Votes',
+        data: money,
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',

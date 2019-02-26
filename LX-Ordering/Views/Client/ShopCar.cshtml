@@ -44,7 +44,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <body>
     @*header*@
     <div class="head-top">
-
     </div>
     <div class="header1">
 
@@ -63,7 +62,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li><a href="/Client/Ordering">我的订单</a></li>
                         <li><a href="/Client/Login">注册/登陆</a></li>
                         <li><a href="/Client/Contact">联系</a></li>
-                        <div class="clearfix"> </div>
                     </ul>
                     <!-- script-for-nav -->
                     <script>
@@ -85,7 +83,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                             </h3>
                         </a>
-                        <p><a href="javascript:;" class="simpleCart_empty">清空购物车</a></p>
+                        <p><a href="/Client/EmptyCar?id=@Session["Clientid"]" class="simpleCart_empty">清空购物车</a></p>
                         <div class="clearfix"> </div>
                     </div>
                 </div>
@@ -100,11 +98,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <div class="cart-items">
         <div class="container">
             <h1> (@ViewBag.orderNum) 种商品 </h1>
-            <input id="checkedAll" type="checkbox"/>全选
+            <input id="checkedAll" type="checkbox" />全选
 
             @foreach (var item in Model)
             {
-               
                 <script>
                     $(document).ready(function (c) {
                         $('.close1').on('click', function (c) {
@@ -117,19 +114,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                 <div class="cart-header">
                     <div class="close1">
-                        @Ajax.ActionLink("移除", "DeleteOrder", new { id = item.Id }, new AjaxOptions() { Confirm = "是否确认删除？", OnSuccess = "del" })
-                       
+                        @Ajax.ActionLink(" ", "DeleteOrder", new { id = item.Id }, new AjaxOptions() { Confirm = "是否确认删除？", OnSuccess = "del" })
+
                     </div>
                     <div class="cart-sec simpleCart_shelfItem">
                         <div class="cart-item cyc">
                             @*<img src="~/cpts_221_eq/images/6p.jpg" class="img-responsive" alt="" />*@
-                         
+
                             <img src=" @item.Dish.Image" />
                             <input id="Checkbox1" type="checkbox" class="ch" value="@item.Id" />
                         </div>
                         <div class="cart-item-info">
                             <h2><a href="#">  </a>@item.Dish.Name</h2>
-                            <h3><a href="#">  </a><span style="font-size:larger;color:red" class="num">@item.Num:份</span></h3>
+                            <h3><a href="#">  </a></h3>
                             <h3><a href="#">  </a><span style="font-size:larger;color:red" class="price">单价 @item.Dish.Price:元</span></h3>
                             <p>
 
@@ -137,12 +134,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 <input id="Ids" type="hidden" value="@ViewBag.Ids" />
                                 <ul class="qty">
                                     <li>
-                                        <a class="morebtn hvr-rectangle-in" href="#" onclick="shopNumAdd()">+</a>
-
-                                        @*<a class="morebtn hvr-rectangle-in" href="/Client/ShopNumAdd?Id=@item.Id">+</a>*@
+                                        <a class="morebtn hvr-rectangle-in" href="#" onclick="NumAdd(@item.Id)">+</a>
                                     </li>
+                                    <span style="font-size:larger;color:red" class="num">@item.Num</span>
                                     <li>
-                                        <a class="morebtn hvr-rectangle-in" href="#" onclick="shopNumReduce()">-</a>
+                                        <a class="morebtn hvr-rectangle-in" href="#" onclick="NumReduce(@item.Id)" id="Reduce">-</a>
                                         @*<a class="morebtn hvr-rectangle-in" href="/Client/ShopNumReduce?Id=@item.Id">-</a>*@
                                     </li>
                                 </ul>
@@ -150,9 +146,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             </p>
 
                             <div class="delivery">
-
-                                <p>需要花费 :@(item.Num) * @(item.Dish.Price)元</p>
-                                <span>下单时间:@item.OrderTime </span>
+                                <p>需要花费 :@item.Total 元</p>
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -161,7 +155,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </div>
                 </div>
             }
-            
+
         </div>
 
 
@@ -171,23 +165,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="cur-left">
                     <div class="item_add">
                         <span class="item_price">
-                            <a class="morebtn hvr-rectangle-in" href="#" onclick="GetTotal()">结算:</a>
+                            <a class="morebtn hvr-rectangle-in" href="#" onclick="Buy()">购买</a>
                         </span>
                         <span class="item_price"></span>
                     </div>
                 </div>
                 <div class="cur-right">
-                    <div class="item_add"><span class="item_price"><h3 style="color:red">总金额:  元</h3></span></div>
+                    <div class="item_add"><span class="item_price"><h3 style="color:red">总金额:<span id="MoneySum"></span>元</h3></span></div>
                 </div>
                 <div class="clearfix"> </div>
             </div>
-        </div>
-        <div class="col-md-6 company_address">
-            <h4>地址</h4>
-            <p>安徽省临泉县</p>
-            <p>Phone:(00) 222 666 444</p>
-            <p>Email: <a href="mailto:info@example.com">info@mycompany.com</a></p>
-
         </div>
     </div>
 
@@ -205,114 +192,98 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             alert('失败');
         }
     }
+    //次数加
+    function NumAdd(id) {
 
-    $(function () {
-
-        //$("inpudt[type='checkbox']").prop("checked", true);
-        //全选
-        $("#checkedAll").change(function () {
-            $(".ch").prop("checked", $("#checkedAll").prop("checked"));
-           
-            GetTotal();
-
-        })
-
-        $(".ch").click(function () {
-            var len = $(".ch").length;
-            var checkedLen = $(".ch:checked").length;
-            if (len == checkedLen) {
-                //商品全部选中
-                $("#checkedAll").prop("checked", true);
-            }
-            else
-            {
-                //只选择了一部分
-                $("#checkedAll").prop("checked", false);
-            }
-            GetTotal();
-        })
-
-
-    })
-    //计算总金额的方法
-    function GetTotal() {
-        var sums = 0;
-        $(".ch").each(function () {
-            if (this.checked == true) {
-                var shopNum = $(this).find(".num").val();
-                var shopPrice = $(this).find(".price").val();
-                sums += shopNum * shopPrice;
-            }
-        });
-
-        //总金额
-        $("#shopSum").text(sums);
-        //购买了多少个
-        var shopCount = $(".ch").length;
-        $("#simpleCart_quantity").text(shopCount)
-
-    }
-
-    //修改数量+
-    function shopNumAdd() {
-        var nums = $("#Nums").val();
-        var ids = $("#Ids").val();
         $.ajax({
-            url: "http://localhost:62418/api/OrderAPI/UpdOrder",
-            type: "post",
-            dataType: "text",
-            data: { Id: ids, Num: nums },
+            url: '/Client/ShopNumAdd?Id=' + id,
+            type: 'get',
+            dataType: 'text',
             success: function (data) {
-                nums++;
-                if (data > 0) {
-                    alert('添加数量成功')
+                if (data == "0") {
+                    alert("X");
+                }
+                else {
+                    //$(".num").text(data);
+                    location.reload();
                 }
             }
         })
     }
-    //减数量
-    function shopNumReduce()
-    {
-        var nums = $("#Nums").val();
-        var ids = $("#Ids").val();
+    var num = $(".num").text();
+    //次数减
+    function NumReduce(id) {
+        if (Number(num) > 1) {
+            $.ajax({
+                url: '/Client/ShopNumReduce?Id=' + id,
+                type: 'get',
+                dataType: 'text',
+                success: function (data) {
+                    if (data == "0") {
+                        alert("X");
+                    }
+                    else {
+                        location.reload();
+                    }
+                }
+            })
+        }
+        else
+        {
+            $(this).prop("disabled","disabled");
+        }
+    }
+    $(function () {
+        //$("inpudt[type='checkbox']").prop("checked", true);
+        //全选
+        $("#checkedAll").change(function () {
+            $(".ch").prop("checked", $("#checkedAll").prop("checked"));
+
+            var id = [];
+            $(".ch:checked").each(function () {
+                id.push($(this).val());
+            })
+            GetTotal(id);
+
+        })
+        $(".ch").click(function () {
+            var id = [];
+            $(".ch:checked").each(function () {
+                id.push($(this).val());
+            })
+            GetTotal(id);
+        })
+    })
+    //计算总金额的方法
+    function GetTotal(id) {
         $.ajax({
-            url: "http://localhost:62418/api/OrderAPI/UpdOrder",
-            type: "post",
-            dataType: "text",
-            data: { Id: ids, Num: nums },
+            url: '/Client/GetTotal?Id=' + id,
+            type: 'get',
+            dataType: 'text',
             success: function (data) {
-                nums--;
+                if (data.length==0) {
+                    alert("X");
+                }
+                else {
+                    $("#MoneySum").text(data);
+                }
             }
         })
-
     }
+    //购买
+    function Buy()
+    {
+        var id = "";
+        $(".ch:checked").each(function () {
+            id += $(this).val()+",";
+        })
+        if (id == "") {
 
-
-
-
-    //$(function () {
-
-       // $("#Nums").val('@ViewBag.Num');
-   // })
-    //function upNum(By) {
-    //    switch (By)
-    //    {
-    //        case '-':
-    //            if ($("#Nums").val() > 0)
-    //            {
-    //                var numberms = $("#Nums").val(Number($("#Nums").val()) - 1);
-    //                location.href = "/Client/ShopNumAdd?Id=" + $("#Ids").val() + "&Num=" + numberms;
-    //            }
-    //            else
-    //            {
-    //                alert('当前数量为0！数量不能小于0')
-    //            }
-    //            break;
-    //        case '+':
-    //            var numberms=$("#Nums").val(Number($("#Nums").val()) - 1);
-    //            location.href = "/Client/ShopNumAdd?Id=" + $("#Ids").val() + "&Num=" + numberms; 
-    //            break;
-    //        default:
-    //    }
-    //}
+        }
+        else
+        {
+            id = id.substring(0, id.length - 1);
+            location.href = "/Client/Ordering?id=" + id;
+        }
+    }
 </script>

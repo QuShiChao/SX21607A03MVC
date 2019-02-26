@@ -9,20 +9,20 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text;
 using System.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json;
 
 namespace LX_Ordering.Controllers
 {
     public class ClientController : Controller
     {
-       
+        List<DishInfo> dishList = CommonGet<DishInfo>.GetList();
+        List<OrderInfo> orderList = CommonGet<OrderInfo>.GetList();
         // GET: Client
         //商品浏览
-        public ActionResult Index(int pageIndex=1)
+        [MyAuthrization]
+        public ActionResult Index(int pageIndex = 1)
         {
             //int pageSize = 3;
-            List<OrderInfo> dishList = CommonGet<OrderInfo>.GetList();
+
             //int count = dishList.Count();
             //int pagecount = Convert.ToInt32(Math.Ceiling(count * 1.0 / pageSize));//多少页
             //ViewBag.pageIndex = pageIndex;//当前页
@@ -31,7 +31,7 @@ namespace LX_Ordering.Controllers
             //ViewBag.count = count;//多少条
             //var pagelist = dishList.Skip((pageIndex - 1) * pageSize).Take(pageSize);
             return View(dishList);
-            
+
         }
         //发送手机短信
         //调用时只需要把拼成的URL传给该函数即可。判断返回值即可
@@ -83,7 +83,7 @@ namespace LX_Ordering.Controllers
         [HttpGet]
         public ActionResult Register()
         {
-            
+
             List<AddressInfo> addressList = CommonGet<AddressInfo>.GetList().Where(y => y.Pid.Equals(0)).ToList();//获取地址
             ViewBag.P = new SelectList(addressList, "Id", "Name");
             ViewBag.C = new SelectList(new List<AddressInfo>(), "Id", "Name");
@@ -97,7 +97,7 @@ namespace LX_Ordering.Controllers
             return JsonConvert.SerializeObject(addrList);
         }
         [HttpPost]
-        public void Register(ClientInfo client,string Y="")
+        public void Register(ClientInfo client, string Y = "")
         {
             int result = 0;
             if (Y != Session["Random"].ToString())//验证码判断 Session["Random"].ToString()
@@ -169,7 +169,7 @@ namespace LX_Ordering.Controllers
             }
             if (result > 0)
             {
-                Response.Write("<script>location.href='Index'</script>");
+                Response.Write("<script>location.href='http://10.1.155.4:8080/#/goods'</script>");
             }
             else
             {
@@ -210,6 +210,7 @@ namespace LX_Ordering.Controllers
         /// <param name="client">客户信息</param>
         /// <returns></returns>
         [HttpGet]
+        [MyAuthrization]
         public ActionResult UpInfo()
         {
             List<AddressInfo> addressList = CommonGet<AddressInfo>.GetList().Where(y => y.Pid.Equals(0)).ToList();//获取地址
@@ -217,7 +218,7 @@ namespace LX_Ordering.Controllers
             ViewBag.C = new SelectList(new List<AddressInfo>(), "Id", "Name");
             ViewBag.A = new SelectList(new List<AddressInfo>(), "Id", "Name");
             int id = Int32.Parse(Session["Clientid"].ToString());//获取当前账号的ID
-            ClientInfo client =  CommonGet<ClientInfo>.GetList().Where(c => c.Id.Equals(id)).FirstOrDefault();//获取用户信息
+            ClientInfo client = CommonGet<ClientInfo>.GetList().Where(c => c.Id.Equals(id)).FirstOrDefault();//获取用户信息
             return View(client);
         }
         [HttpPost]
@@ -237,7 +238,8 @@ namespace LX_Ordering.Controllers
         }
 
         //联系
-        public ActionResult Contact(string name="",string tel = "",string city="",string remark="")
+        [MyAuthrization]
+        public ActionResult Contact(string name = "", string tel = "", string city = "", string remark = "")
         {
             if (name != "" & tel != "" & city != "")
             {
@@ -255,37 +257,46 @@ namespace LX_Ordering.Controllers
             var result = from o in CommonGet<OrderInfo>.GetList()
                          join d in CommonGet<DishInfo>.GetList() on o.Did equals d.Id
                          join c in CommonGet<ClientInfo>.GetList() on d.Cid equals c.Id
-                         select new 
+                         select new
                          {
                              Id = o.Id,
-                             Cid=d.Cid,
-                             Did=d.Id,
+                             Cid = d.Cid,
+                             Did = d.Id,
                              Name = d.Name,
-                             Intro=d.Intro,
-                             Statuss=d.Status,
-                             OrderNums=d.OrderNums,
-                             Up=d.Up,
-                             Down=d.Down,
+                             Intro = d.Intro,
+                             Statuss = d.Status,
+                             OrderNums = d.OrderNums,
+                             Up = d.Up,
+                             Down = d.Down,
                              Num = o.Num,
                              Total = o.Total,
                              Leave = o.Leave,
                              Status = o.Status,
                              OrderTime = o.OrderTime,
-                             OrderType=o.OrderType,
+                             OrderType = o.OrderType,
                              Addr = c.Addr,
-                             HeadImage=c.HeadImage
+                             HeadImage = c.HeadImage
                          };
             List<OrderInfo> orderList = JsonConvert.DeserializeObject<List<OrderInfo>>(JsonConvert.SerializeObject(result));
             return orderList;
         }
 
-        
+
         //List<OrderInfo> orderList1 = CommonGet<OrderInfo>.GetList().Where(c => c.Status.Equals(0)).ToList();
 
         //添加至购物车
-        public int AddToCar(OrderInfo order)
+        public int AddToCar(int id)
         {
-           
+            DishInfo dish = dishList.FirstOrDefault(d => d.Id.Equals(id));
+            OrderInfo order = new OrderInfo();
+            order.Cid = Convert.ToInt32(Session["Clientid"]);
+            order.Did = dish.Id;
+            order.Num = 1;
+            order.OrderType = 0;
+            order.Total = order.Num * dish.Price;
+            order.Leave = "";
+            order.Status = 0;
+            order.OrderTime = DateTime.Now;
             string json = JsonConvert.SerializeObject(order);
             string result = HttpClientHelper.SendRequest("api/OrderAPI/AddOrder", "post", json);
             int s = Convert.ToInt32(result);
@@ -316,60 +327,119 @@ namespace LX_Ordering.Controllers
             return results;
         }
         //清空购物车
-        //public void EmptyCar()
-        //{
-        //    orderList1.Clear();
-            
-        //}
+        public void EmptyCar()
+        {
+            //客户ID
+            int cid = Convert.ToInt32(Session["Clientid"]);
+            string ids = "";
+            List<OrderInfo> orders = orderList.Where(o => o.Cid.Equals(cid)).ToList();
+            foreach (var item in orders)
+            {
+                ids += item.Id + ",";
+            }
+            ids = ids.Substring(0, ids.Length - 1);
+            string[] idArray = ids.Split(',');
+            string result = "";
+            foreach (var item in idArray)
+            {
+                result = HttpClientHelper.SendRequest("api/OrderAPI/DelOrder?id=" + item, "delete");
+
+            }
+            //if (result == "")
+            //{
+            //    return 
+            //}
+            //int results = Convert.ToInt32(result);
+
+            Response.Write("<script>location.href='/Client/ShopCar';</script>");
+
+        }
         //购物车所有商品
+        [MyAuthrization]
         public ActionResult ShopCar()
-         {
-            //未付款        
-            List<OrderInfo> orderList = CommonGet<OrderInfo>.GetList().Where(c=>c.Status.Equals(0)).ToList();
-          
-            int orderNum = orderList.Count();//购物车里 总数                             
-            //  Session["orderCar"] = orderList;
-            int oId = (Session["Order"] as OrderInfo).Id;//订单id
-            ViewBag.Ids = oId;
-            ViewBag.orderNum = orderNum;
-            int Num = 1;
-            ViewBag.Num =Num;//商品的数量
-            //ViewBag.Total = order.Total;
+        {
+            //购物车    
+            List<OrderInfo> orderList = CommonGet<OrderInfo>.GetList().Where(c => c.Status.Equals(0)).ToList();
+            ViewBag.count = orderList.Count();//购物车里 总数 
             return View(orderList);
         }
         //修改购物车中的数量 +
-        public void ShopNumAdd(int Id)
+        public string ShopNumAdd(int Id)
         {
-         
+
             OrderInfo order = CommonGet<OrderInfo>.GetList().Where(c => c.Id.Equals(Id)).FirstOrDefault();
-            Id=order.Id;
-            if (order.Num >= 0)
+            DishInfo dish = dishList.FirstOrDefault(d => d.Id.Equals(order.Did));
+            order.Num++;
+            order.Total = order.Num * dish.Price;
+            string jsonstr = JsonConvert.SerializeObject(order);
+            string result = HttpClientHelper.SendRequest("api/OrderAPI/UpdOrder?id=" + Id, "put", jsonstr);
+            if (result == "")
             {
-                order.Num++;
-                string jsonstr = JsonConvert.SerializeObject(order);
-                string result = HttpClientHelper.SendRequest("api/ClientAPIOrderAPI/UpOrder?Id=" + Id, "put", jsonstr);
+                return "0";
+            }
+            else
+            {
                 if (int.Parse(result) > 0)
                 {
-                    Response.Write("<script>alert('')</script>;location.href='/Client/ShopCar'");
+                    return order.Num.ToString();
+                }
+                else
+                {
+                    return "0";
                 }
             }
         }
         //修改数量 -
-        public void ShopNumReduce(int Id)
+        public string ShopNumReduce(int Id)
         {
-         
+
             OrderInfo order = CommonGet<OrderInfo>.GetList().Where(c => c.Id.Equals(Id)).FirstOrDefault();
-            Id = order.Id;
-            if (order.Num >= 0)
+            DishInfo dish = dishList.FirstOrDefault(d => d.Id.Equals(order.Did));
+            order.Num--;
+            order.Total = order.Num * dish.Price;
+            string jsonstr = JsonConvert.SerializeObject(order);
+            string result = HttpClientHelper.SendRequest("api/OrderAPI/UpdOrder?id=" + Id, "put", jsonstr);
+            if (result == "")
             {
-                order.Num--;
-                string jsonstr = JsonConvert.SerializeObject(order);
-                string result = HttpClientHelper.SendRequest("api/ClientAPIOrderAPI/UpOrder?Id=" + Id, "put", jsonstr);
+                return "0";
+            }
+            else
+            {
                 if (int.Parse(result) > 0)
                 {
-                    Response.Write("<script>alert('')</script>;location.href='/Client/ShopCar'");
+                    return order.Num.ToString();
                 }
-            }  
+                else
+                {
+                    return "0";
+                }
+            }
+        }
+        //获取总价
+        public string GetTotal(string id = "")
+        {
+            if (id == "")
+            {
+                return "0";
+            }
+            else
+            {
+                decimal money = 0;
+                string[] idArray = id.Split(',');
+                foreach (var item in idArray)
+                {
+                    money += orderList.FirstOrDefault(o => o.Id.ToString().Equals(item)).Total;
+                }
+                //decimal money = orderList.Where(id.Contains(o => o.Id)).Sum(o => o.Total);
+                //var result =from o in orderList
+                //                 where o.Id.ToString().Contains(id)
+                //                 group o by o.Id into g
+                //                 select new
+                //                 {
+                //                     t = g.Sum(y => y.Total)
+                //                 };
+                return money.ToString();
+            }
         }
         //下单操作 xxxxx
         //public decimal Pay(int Id)
@@ -382,23 +452,28 @@ namespace LX_Ordering.Controllers
         //    return  order.Total = order.Num * dish.Price;//总价
         //}
         //所有订单信息 +物流信息(已下单)
-        public ActionResult Ordering()
+        [MyAuthrization]
+        public ActionResult Ordering(string id)
         {
-            //已付款
-            List<OrderInfo> orderList = CommonGet<OrderInfo>.GetList().Where(c=>c.Status==1).ToList();
-            return View(orderList);
+            string[] arrId = id.Split(',');
+            //查询要购买的订单信息
+            List<OrderInfo> oList = new List<OrderInfo>();
+            foreach (var item in arrId)
+            {
+                OrderInfo order = orderList.FirstOrDefault(o=>o.Id.ToString().Equals(item));
+                oList.Add(order);
+            }
+            return View(oList);
         }
         //查看商品的所有评价（）
-
-        public ActionResult SingleA(int Did = 0, int PageIndex = 1, int PageSize = 3)
+        [MyAuthrization]
+        public ActionResult SingleA(int id = 0, int PageIndex = 1, int PageSize = 3)
         {
             //获取评价信息
             List<EvaluateInfo> evaluatelist = CommonGet<EvaluateInfo>.GetList();
-            //模糊查询
-            if (Did > 0)
-            {
-                evaluatelist = (from a in evaluatelist where a.Did.Equals(Did) select a).ToList();
-            }
+
+            evaluatelist = (from a in evaluatelist where a.Did.Equals(id) select a).ToList();
+            ViewBag.dish = dishList.FirstOrDefault(d=>d.Id.Equals(id));
             //总记录数
             int Count = evaluatelist.Count();
             //总页数
@@ -409,8 +484,9 @@ namespace LX_Ordering.Controllers
             return View(evaluatelist.Skip((PageIndex - 1) * PageSize).Take(PageSize));
         }
         [HttpGet]//添加评价
+        [MyAuthrization]
         public ActionResult SingleAdd()
-        {          
+        {
             return View();
         }
         [HttpPost]//添加评价
@@ -430,23 +506,15 @@ namespace LX_Ordering.Controllers
                 Response.Write("<script>alert('评价失败')</script>");
             }
         }
-        //反填
-        [HttpGet]
-        public ActionResult UpInfo(string Id)//参数应是int类型  用到改回int类型
-        {
-            return View();
-        }
-        //修改信息
-        [HttpPost]
-        public ActionResult UpInfo(ClientInfo client)
-        {
-            return View();
-        }
         //地图方法
-        public ActionResult Map()
-        {   
-            List<Logistics> logisticslist = CommonGet<Logistics>.GetList();           
-            return View(logisticslist);
+        [MyAuthrization]
+        public ActionResult Map(string addr)
+        {
+            //河南省平顶山市叶县水寨乡
+            ViewBag.Addr = "河南省平顶山市叶县水寨乡";
+            List<Logistics> logisticslist = CommonGet<Logistics>.GetList();
+            ViewBag.Oid = 0;
+            return View();
         }
     }
 }

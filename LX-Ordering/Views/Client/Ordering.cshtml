@@ -78,7 +78,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 @*<img src="images/bag.png" alt="">*@
                             </h3>
                         </a>
-                        <p><a href="javascript:;" class="simpleCart_empty">清空购物车</a></p>
+                        <p><a href="/Client/EmptyCar?id=@Session["Clientid"]" class="simpleCart_empty">清空购物车</a></p>
                         <div class="clearfix"> </div>
                     </div>
                 </div>
@@ -101,8 +101,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="head-nav">
                     <span class="menu"> </span>
                     <ul>
-                        <li class="active"><a href="/Client/Ordering">订单物流信息</a></li>
-                        <li><a href="/Client/SingleA">评价</a></li>
+                        <li class="active"><a href="/Client/Ordering">订单结算页面</a></li>
+                        <li><a href="/Client/SingleA">我的购物</a></li>
                         <li><a href="/Client/Index">历史购买记录</a></li>
 
                     </ul>
@@ -126,12 +126,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <div class="cart-items">
         <div class="container">
          
-            <h1>总数量 </h1>
+            <h1>结算订单</h1>
          
             <div class="cart-header">
                 @foreach (var item in Model)
                 {
-                    <h1>@item.Num</h1>
+                    <h1></h1>
 
                     <div class="cart-sec simpleCart_shelfItem">
                         <div class="cart-item cyc">
@@ -142,7 +142,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <h3>
                                 <a href="#"> @item.Dish.Name </a>
                                 <span style="font-size:larger;color:red">数量:@item.Num 份</span>
-                                <span style="font-size:larger;color:red">当前所在地址: @item.Client.Addr</span>
+                                <span style="font-size:larger;color:red">当前所在地址: @item.Client.Addr</span> <a href="/Client/Map?addr=@item.Client.Addr"> @item.Dish.Name </a>
                             </h3>
 
 
@@ -157,60 +157,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
                     </div>
                 }
-            </div>
-
-            <div class="cart-header2">
-
-                <div class="cart-sec simpleCart_shelfItem">
-                    <div class="cart-item cyc">
-                        <img src="~/cpts_221_eq/images/8p.jpg" class="img-responsive" alt="" />
-
-                    </div>
-                    <div class="cart-item-info">
-                        <h3>
-                            <a href="#"> 蚂蚁上树 </a>
-                            <span style="font-size:larger;color:red">数量:3分</span>
-                            <span style="font-size:larger;color:red">当前所在地址:</span>
-                        </h3>
-                        <div class="delivery"></div>
-                        <div class="delivery">
-                            <p>需要花费 : $10.00</p>
-                            <br />
-                            <p>下单时间:2019-01-01</p>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-
-                </div>
-            </div>
-
-            <div class="cart-header3">
-
-                <div class="cart-sec simpleCart_shelfItem">
-                    <div class="cart-item cyc">
-                        <img src="~/cpts_221_eq/images/5p.jpg" class="img-responsive" alt="" />
-                    </div>
-                    <div class="cart-item-info">
-                        <h3>
-                            <a href="#"> 红红紫紫 </a>
-                            <span style="font-size:larger;color:red">数量:3分</span>
-                            <span style="font-size:larger;color:red">当前所在地址:</span>
-                        </h3>
-
-                        @*<div class="clearfix"> </div>*@
-                        <div class="delivery"></div>
-
-                        <div class="delivery">
-                            <p>需要花费 : $10.00</p>
-                            <br />
-                            <p>下单时间:2019-01-01</p>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-
             </div>
         </div>
 

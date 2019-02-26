@@ -34,11 +34,11 @@
     <title>乐享点餐</title>
 </head>
 <body>
-    <div style="width:100%;height:50%">
+    <div style="width:100%;height:100%">
         <div id="allmap"></div>
         <div id="l-map">
             <h4 style="color:darkorange">配送状态:</h4>
-            @foreach (var item in Model)
+            @*@foreach (var item in Model)
             {
                 if ((item.Status) == 0)
                 {
@@ -80,7 +80,7 @@
                 }
             }
 
-        </div>
+        </div>*@
         @*<div id="r-result"></div>*@
     </div>  
 </body>
@@ -106,7 +106,7 @@
     map.addOverlay(marker);               // 将标注添加到地图中
     marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
-    var output = "从上海教卫青少年社会实践基地到外滩需要";
+    var output = "该订单送达需要";
     var searchComplete = function (results) {
         if (transit.getStatus() != BMAP_STATUS_SUCCESS) {
             return;
@@ -133,5 +133,5 @@
             setTimeout(function () { alert(output) });
         }
     });
-    transit.search("上海教卫青少年社会实践基地", "外滩");
+    transit.search("上海教卫青少年社会实践基地","@ViewBag.Addr");
 </script>

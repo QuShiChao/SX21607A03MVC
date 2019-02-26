@@ -28,7 +28,7 @@ namespace LX_Ordering.Models
         [Required(ErrorMessage ="不能为空")]
         public int Num { get; set; }
         //订单类型：订餐0、就餐1
-        [Display(Name = "数量")]
+        [Display(Name = "订单类型")]
         [Required(ErrorMessage = "不能为空")]
         public int OrderType { get; set; }
         //总价

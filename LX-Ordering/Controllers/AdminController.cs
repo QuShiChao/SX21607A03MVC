@@ -14,6 +14,7 @@ namespace LX_Ordering.Controllers
         List<OrderInfo> OrderList = CommonGet<OrderInfo>.GetList();//订餐系统
         List<EvaluateInfo> EvalList = CommonGet<EvaluateInfo>.GetList();//评价系统
         //管理员主页面
+        //[AdminAuthrization]
         public ActionResult Index()
         {
             ViewBag.count=OrderList.Count();
@@ -24,11 +25,10 @@ namespace LX_Ordering.Controllers
                             Sum = t.Sum(a => a.Total)
                         }).ToString();
             ViewBag.sum = total;
-            return View();
-
             return View(OrderList);
         }
         //注册
+        [AdminAuthrization]
         public ActionResult AdminRegist()
         {
             return View();
@@ -79,6 +79,7 @@ namespace LX_Ordering.Controllers
             return View();
         }
         //添加菜系
+        [AdminAuthrization]
         public ActionResult AddCatagery()
         {
             return View();
@@ -146,6 +147,7 @@ namespace LX_Ordering.Controllers
             }
         }
         //添加菜色
+        [AdminAuthrization]
         public ActionResult AddDish(int id = 0)
         {
             ViewBag.id = id;
@@ -187,6 +189,7 @@ namespace LX_Ordering.Controllers
         }
         List<DishInfo> dishList = CommonGet<DishInfo>.GetList();
         //查看菜肴信息
+        [AdminAuthrization]
         public ActionResult ShowDish(int pageIndex = 1, int pageSize = 8, string name = "")
         {
             if (name != "")
@@ -264,6 +267,18 @@ namespace LX_Ordering.Controllers
         public ActionResult GetSales()
         {
             return View();
+        }
+        public JsonResult ShowMoney()
+        {
+            OrderList = OrderList.Where(s => s.Status >= 2 && s.OrderTime > s.OrderTime.AddDays(-6)).ToList();
+            var result = (from a in OrderList
+                          group a by a.OrderTime.ToString("yyyy/mm/dd") into time
+                          select new
+                          {
+                              Time = time.Key,
+                              Sum = time.Sum(a => a.Total)
+                          }).ToList();
+            return Json(result);
         }
         //菜色评价
         public ActionResult LookEvaluate()
